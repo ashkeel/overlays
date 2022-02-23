@@ -4,16 +4,17 @@ import ObsWebSocket from 'obs-websocket-js';
 export async function OBS(): Promise<ObsWebSocket> {
   const obs = new ObsWebSocket();
   await obs.connect({
-    address: import.meta.env.VITE_OBS_ENDPOINT,
-    password: import.meta.env.VITE_OBS_PASSWORD,
+    address: process.env.VITE_OBS_ENDPOINT,
+    password: process.env.VITE_OBS_PASSWORD,
   });
   return obs;
 }
 
 export async function Kilovolt(): Promise<KilovoltWS> {
   const kv = new KilovoltWS(
-    import.meta.env.VITE_KILOVOLT_ENDPOINT,
-    import.meta.env.VITE_KILOVOLT_PASSWORD
+    process.env.VITE_KILOVOLT_ENDPOINT,
+    process.env.VITE_KILOVOLT_PASSWORD,
+    { reconnect: true }
   );
   await kv.wait();
   return kv;

@@ -3,285 +3,25 @@
 import '../lib/sentry';
 import '../lib/youtube-init';
 
-import anime from 'animejs';
-import { Howl } from 'howler';
-import { $el } from '../lib/domutils';
 import {
   CheerEvent,
   CustomRewardRedemptionEvent,
   EventSubEvent,
-  FollowEvent,
+  FollowEvent as TwitchFollowEvent,
   RaidEvent,
   ResubscriptionEvent,
   SubscriptionEvent,
 } from '../lib/twitch-types';
 
-// eslint-disable-next-line import/order
-import followWoosh from '../assets/sounds/follow-woosh.wav';
+import { FollowEvent as GlimeshFollowEvent } from '../lib/glimesh-types';
+
 import { Kilovolt } from '../lib/connection-utils';
-import {
-  AlertData,
-  FollowAlert,
-  SubAlert,
-  RaidAlert,
-  CheerAlert,
-} from './types';
+import { AlertData, SubAlert } from './types';
 import { initOBS, playShitpost } from './youtube';
-import { animate, delay } from './sync';
+import { followAnim, subAnim, cheerAnim, raidAnim } from './animations';
 
 const alertQueue: AlertData[] = [];
 let isPlaying = false;
-
-const staging = document.getElementById('backstage');
-
-const followSprite = new Howl({ src: [followWoosh] });
-
-// Create letters to be animated
-function animScript(text: string): HTMLElement {
-  const letters = text
-    .split('')
-    .map((letter, i) =>
-      $el(
-        'div',
-        { className: letter.trim().length < 1 ? 'letter space' : 'letter' },
-        [
-          'div',
-          { className: 'inner', style: `animation-delay: ${300 * i}ms` },
-          letter,
-        ]
-      )
-    );
-  return $el('div', { className: 'anim-wrapper' }, ...letters);
-}
-
-async function followAnim(alertData: FollowAlert) {
-  const div = animScript('New follow');
-  staging.appendChild(div);
-  followSprite.play();
-  await animate({
-    targets: div.querySelectorAll('.letter'),
-    translateX: -150,
-    translateY: -160,
-    rotate: '1turn',
-    duration: 800,
-    easing: 'easeOutCubic',
-    delay: anime.stagger(50),
-  });
-  await delay(1700);
-  anime({
-    targets: div.querySelectorAll('.letter'),
-    duration: 400,
-    translateX: -180,
-    translateY: -220,
-    easing: 'easeOutBack',
-    fontSize: '35pt',
-    delay: 200,
-  });
-  const userdiv = animScript(alertData.user);
-  staging.appendChild(userdiv);
-  anime({
-    targets: userdiv.querySelectorAll('.letter'),
-    translateX: -150,
-    translateY: -160,
-    rotate: '1turn',
-    duration: 400,
-    easing: 'easeOutCubic',
-    delay: anime.stagger(50),
-  });
-  await delay(3000);
-  await animate({
-    targets: [
-      div.querySelectorAll('.letter'),
-      userdiv.querySelectorAll('.letter'),
-    ],
-    duration: 200,
-    easing: 'easeOutCubic',
-    scaleX: 0.8,
-    scaleY: 0,
-    rotate: () => `${anime.random(0, 40)}deg`,
-    translateX: () => anime.random(-170, -220),
-    translateY: () => anime.random(-160, -200),
-    delay: anime.stagger(20),
-  });
-  staging.removeChild(div);
-  staging.removeChild(userdiv);
-}
-
-async function subAnim(alertData: SubAlert) {
-  let div: HTMLElement = null;
-  if (alertData.total) {
-    div = animScript(`Resub `);
-    const months = animScript(`${alertData.total} months`);
-    while (months.firstElementChild) {
-      months.firstElementChild.className = 'letter smol';
-      div.appendChild(months.firstElementChild);
-    }
-  } else {
-    div = animScript('New sub');
-  }
-  staging.appendChild(div);
-  followSprite.play();
-  await animate({
-    targets: div.querySelectorAll('.letter'),
-    translateX: -150,
-    translateY: -160,
-    rotate: '1turn',
-    duration: 800,
-    easing: 'easeOutCubic',
-    delay: anime.stagger(50),
-  });
-  await delay(1700);
-  anime({
-    targets: div.querySelectorAll('.letter'),
-    duration: 400,
-    translateX: -180,
-    translateY: -220,
-    easing: 'easeOutBack',
-    fontSize: '35pt',
-    delay: 200,
-  });
-  const userdiv = animScript(alertData.user);
-  staging.appendChild(userdiv);
-  anime({
-    targets: userdiv.querySelectorAll('.letter'),
-    translateX: -150,
-    translateY: -160,
-    rotate: '1turn',
-    duration: 400,
-    easing: 'easeOutCubic',
-    delay: anime.stagger(50),
-  });
-  await delay(3000);
-  await animate({
-    targets: [
-      div.querySelectorAll('.letter'),
-      userdiv.querySelectorAll('.letter'),
-    ],
-    duration: 200,
-    easing: 'easeOutCubic',
-    scaleX: 0.8,
-    scaleY: 0,
-    rotate: () => `${anime.random(0, 40)}deg`,
-    translateX: () => anime.random(-170, -220),
-    translateY: () => anime.random(-160, -200),
-    delay: anime.stagger(20),
-  });
-  staging.removeChild(div);
-}
-
-async function raidAnim(alertData: RaidAlert) {
-  const div = animScript(`Raid `);
-  const months = animScript(`${alertData.viewers} viewers`);
-  while (months.firstElementChild) {
-    months.firstElementChild.className = 'letter smol';
-    div.appendChild(months.firstElementChild);
-  }
-  staging.appendChild(div);
-  followSprite.play();
-  await animate({
-    targets: div.querySelectorAll('.letter'),
-    translateX: -150,
-    translateY: -160,
-    rotate: '1turn',
-    duration: 800,
-    easing: 'easeOutCubic',
-    delay: anime.stagger(50),
-  });
-  await delay(1700);
-  anime({
-    targets: div.querySelectorAll('.letter'),
-    duration: 400,
-    translateX: -180,
-    translateY: -220,
-    easing: 'easeOutBack',
-    fontSize: '35pt',
-    delay: 200,
-  });
-  const userdiv = animScript(alertData.user);
-  staging.appendChild(userdiv);
-  anime({
-    targets: userdiv.querySelectorAll('.letter'),
-    translateX: -150,
-    translateY: -160,
-    rotate: '1turn',
-    duration: 400,
-    easing: 'easeOutCubic',
-    delay: anime.stagger(50),
-  });
-  await delay(3000);
-  await animate({
-    targets: [
-      div.querySelectorAll('.letter'),
-      userdiv.querySelectorAll('.letter'),
-    ],
-    duration: 200,
-    easing: 'easeOutCubic',
-    scaleX: 0.8,
-    scaleY: 0,
-    rotate: () => `${anime.random(0, 40)}deg`,
-    translateX: () => anime.random(-170, -220),
-    translateY: () => anime.random(-160, -200),
-    delay: anime.stagger(20),
-  });
-  staging.removeChild(div);
-}
-
-async function cheerAnim(alertData: CheerAlert) {
-  const div = animScript(`Cheer `);
-  const months = animScript(`${alertData.amount} bits`);
-  while (months.firstElementChild) {
-    months.firstElementChild.className = 'letter smol';
-    div.appendChild(months.firstElementChild);
-  }
-  staging.appendChild(div);
-  followSprite.play();
-  await animate({
-    targets: div.querySelectorAll('.letter'),
-    translateX: -150,
-    translateY: -160,
-    rotate: '1turn',
-    duration: 800,
-    easing: 'easeOutCubic',
-    delay: anime.stagger(50),
-  });
-  await delay(1700);
-  anime({
-    targets: div.querySelectorAll('.letter'),
-    duration: 400,
-    translateX: -180,
-    translateY: -220,
-    easing: 'easeOutBack',
-    fontSize: '35pt',
-    delay: 200,
-  });
-  const userdiv = animScript(alertData.user);
-  staging.appendChild(userdiv);
-  anime({
-    targets: userdiv.querySelectorAll('.letter'),
-    translateX: -150,
-    translateY: -160,
-    rotate: '1turn',
-    duration: 400,
-    easing: 'easeOutCubic',
-    delay: anime.stagger(50),
-  });
-  await delay(3000);
-  await animate({
-    targets: [
-      div.querySelectorAll('.letter'),
-      userdiv.querySelectorAll('.letter'),
-    ],
-    duration: 200,
-    easing: 'easeOutCubic',
-    scaleX: 0.8,
-    scaleY: 0,
-    rotate: () => `${anime.random(0, 40)}deg`,
-    translateX: () => anime.random(-170, -220),
-    translateY: () => anime.random(-160, -200),
-    delay: anime.stagger(20),
-  });
-  staging.removeChild(div);
-}
 
 async function playAlert(alertData: AlertData) {
   isPlaying = true;
@@ -340,14 +80,23 @@ async function run() {
   const server = await Kilovolt();
   await initOBS();
 
-  // Start subscription for timer events
+  // Start subscription for glimesh events
+  server.subscribeKey('glimesh/ev/follow', async (newValue) => {
+    const ev = JSON.parse(newValue) as GlimeshFollowEvent;
+    alertQueue.push({
+      type: 'follow',
+      user: ev.user.displayname || ev.user.username,
+    });
+  });
+
+  // Start subscription for twitch events
   server.subscribeKey('stulbe/ev/webhook', async (newValue) => {
     const ev = JSON.parse(newValue) as EventSubEvent;
     switch (ev.subscription.type) {
       case 'channel.follow':
         alertQueue.push({
           type: 'follow',
-          user: (ev as FollowEvent).event.user_name,
+          user: (ev as TwitchFollowEvent).event.user_name,
         });
         break;
       case 'channel.subscribe': {
