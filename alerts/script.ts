@@ -1,11 +1,9 @@
 /* eslint-disable import/no-unresolved */
 /* eslint-disable default-case */
 import '../lib/sentry';
-import '../lib/youtube-init';
 
 import {
   CheerEvent,
-  CustomRewardRedemptionEvent,
   EventSubEvent,
   FollowEvent as TwitchFollowEvent,
   RaidEvent,
@@ -17,7 +15,6 @@ import { FollowEvent as GlimeshFollowEvent } from '../lib/glimesh-types';
 
 import { Kilovolt } from '../lib/connection-utils';
 import { AlertData, SubAlert } from './types';
-import { initOBS, playShitpost } from './youtube';
 import { followAnim, subAnim, cheerAnim, raidAnim } from './animations';
 
 const alertQueue: AlertData[] = [];
@@ -37,9 +34,6 @@ async function playAlert(alertData: AlertData) {
       break;
     case 'raid':
       await raidAnim(alertData);
-      break;
-    case 'redeem-shitpost':
-      playShitpost(alertData);
       break;
     default:
     // TODO
@@ -78,7 +72,6 @@ function deduplicateSubs(name: string) {
 async function run() {
   // Connect to strimertul and OBS
   const server = await Kilovolt();
-  await initOBS();
 
   // Start subscription for glimesh events
   server.subscribeKey('glimesh/ev/follow', async (newValue) => {
@@ -147,17 +140,6 @@ async function run() {
           viewers: chr.event.viewers,
         });
         break;
-      }
-      case 'channel.channel_points_custom_reward_redemption.add': {
-        const redeem = ev as CustomRewardRedemptionEvent;
-        switch (redeem.event.reward.id) {
-          case '66ce0b06-1f39-4742-81c2-962dbf98fb06': // Shitpost time
-            alertQueue.push({
-              type: 'redeem-shitpost',
-              user: redeem.event.user_name,
-            });
-            break;
-        }
       }
     }
   });

@@ -1,3 +1,12 @@
 {
-  "extends": "@parcel/config-default"
+  "extends": "@parcel/config-default",
+  "resolvers": [
+    "@parcel/resolver-glob",
+    "..."
+  ],
+  "transformers": {
+    "*.{mp4,webm}": [
+      "@parcel/transformer-raw"
+    ]
+  }
 }
