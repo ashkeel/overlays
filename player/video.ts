@@ -6,7 +6,6 @@ import {
   CustomRewardRedemptionEvent,
   EventSubEvent,
 } from '../lib/twitch-types';
-import { createPlayer } from '../lib/player';
 import OBSWebSocket from 'obs-websocket-js';
 import { Kilovolt, OBS } from '../lib/connection-utils';
 
