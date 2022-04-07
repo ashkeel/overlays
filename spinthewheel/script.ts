@@ -47,6 +47,11 @@ const values = [
   'Alicia race',
   '.hack//GU Dungeon',
   'Diabotical Temple escape',
+  'OSFE Shopkeeper 1',
+  'Celeste C-side',
+  'Flesh & Blood vs Bot',
+  'Hyper Hexagonest 60sec run',
+  'Inertial Drift challenge',
 ];
 
 // Create letters to be animated
