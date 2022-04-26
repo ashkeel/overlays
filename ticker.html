@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Timer</title>
+    <style>
+      :root {
+        --bg-dark: #d3b0db;
+        --bg-light: #f7e5fb;
+        --bg: linear-gradient(to bottom, var(--bg-dark), var(--bg-light));
+      }
+      body {
+        background-color: #486065;
+        font-family: 'New Era Casual';
+      }
+      #ticker {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 40px;
+        background: linear-gradient(to bottom, #bc97c4, #e6ceea);
+        display: flex;
+      }
+      #timer {
+        border-radius: 230px;
+        width: 100px;
+        padding: 0 18px 0 40px;
+        margin-left: -24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'New Era Casual';
+        font-weight: bold;
+        letter-spacing: 1pt;
+        margin-top: -2pt;
+        background: var(--bg);
+        border-right: 1px solid #d7aee0;
+        box-shadow: inset -1px 0 #f4d7e8;
+      }
+      #timer span {
+        flex: 1;
+        display: block;
+        font-size: 22pt;
+        color: black;
+        background: linear-gradient(to bottom, #d44788, #ed61a3);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      #content {
+        overflow: hidden;
+      }
+      #content article {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+      }
+      #content article header {
+        padding: 10pt;
+        font-size: 17pt;
+        font-family: 'Boogaloo';
+        font-weight: bold;
+        text-shadow: 1px 1px 1px #ffffff;
+        color: #9e2e8f;
+        text-transform: uppercase;
+      }
+      .content-title span {
+        display: inline-block;
+        animation: wobble 1s linear alternate infinite;
+        animation-delay: attr(data-index integer);
+      }
+      @keyframes wobble {
+        from {
+          transform: translateY(-10px);
+        }
+        to {
+          transform: translateY(10px);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main id="ticker">
+      <section id="timer"><span></span></section>
+      <section id="content">
+        <article>
+          <header class="content-title" data-transform="to-letters">
+            Next goal
+          </header>
+        </article>
+        <article>
+          <header class="content-title" data-transform="to-letters">
+            Up next
+          </header>
+        </article>
+      </section>
+    </main>
+    <script type="module">
+      import './ticker/script';
+    </script>
+  </body>
+</html>
