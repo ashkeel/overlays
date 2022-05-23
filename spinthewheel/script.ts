@@ -2,17 +2,18 @@ import Kilovolt from '@strimertul/kilovolt-client';
 import anime from 'animejs';
 import { Howl } from 'howler';
 import JSConfetti from 'js-confetti';
+import { delay } from '../lib/sync';
 import {
   CustomRewardRedemptionEvent,
   EventSubEvent,
-} from 'lib/twitch-types.ts';
+} from '../lib/twitch-types';
 //@ts-expect-error asset
 import drop from 'url:../assets/sounds/airhornplus.mp3';
 //@ts-expect-error asset
 import muzik from 'url:../assets/sounds/okcut.mp3';
 //@ts-expect-error asset
 import tick from 'url:../assets/sounds/tick.wav';
-import { animate, delay } from '../alerts/sync';
+import { animate } from '../alerts/sync';
 import { Kilovolt as KV } from '../lib/connection-utils';
 import { $el } from '../lib/domutils';
 
@@ -28,17 +29,14 @@ const values = [
   'Littlewood Tarott Master',
   'Super Auto Pets',
   'Frozen Synapse skirmish',
-  'Yakuza 0 Pocket Circuit',
   'Super Hexagon',
   'Spin Rhythm XD',
   'Windjammers 2',
-  'Jazztronauts',
-  'Yakuza 0 Darts',
+  //'Jazztronauts',
   'No Straight Roads Parry mode',
   'CrossCode Cave of Aspiration',
   'Shenzen I/O Solitaire',
   'Sonic Riders Battle',
-  'Yakuza 0 Batting Cages',
   'SRB2Kart SPB Attack',
   'Bemuse.ninja',
   'Frozen Cortex skirmish',

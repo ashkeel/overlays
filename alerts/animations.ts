@@ -5,8 +5,9 @@ import { $el } from '../lib/domutils';
 //@ts-expect-error asset
 import followWoosh from 'url:../assets/sounds/follow-woosh.wav';
 
-import { animate, delay } from './sync';
+import { animate } from './sync';
 import { FollowAlert, SubAlert, RaidAlert, CheerAlert } from './types';
+import { delay } from '../lib/sync';
 
 const followSprite = new Howl({ src: [followWoosh] });
 
