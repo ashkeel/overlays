@@ -41,14 +41,74 @@ function setRow(
 const ok = '#2f6b48';
 const bad = '#77302e';
 const reallybad = '#ec3c45';
+const meh = '#72673c';
 
 const stulName = 'strimertul';
 const twitchName = 'Twitch stream';
+const preroll = 'Preroll ads';
+
+let username = '';
+let adRun = false;
+let twitchLive = false;
+
+interface PrerollData {
+  data: {
+    user: {
+      prerollFreeTimeSeconds: number;
+    };
+  };
+  extensions: {
+    durationMilliseconds: number;
+    requestID: string;
+  };
+}
+
+async function checkPreroll() {
+  if (!twitchLive || !username) {
+    setRow(twitchName, 'Not live', { backgroundColor: bad });
+    return;
+  }
+  console.log('Checking for ' + username);
+  // Check preroll time
+  try {
+    const res = await fetch('https://gql.twitch.tv/gql', {
+      headers: {
+        'Client-Id': process.env.VITE_TWITCH_TOKEN,
+        'Content-Type': 'application/json',
+      },
+      body:
+        '{"query":"query { user(login: \\"' +
+        username +
+        '\\") {prerollFreeTimeSeconds}}"}',
+      method: 'POST',
+      mode: 'cors',
+    });
+    if (!res.ok) {
+      const err = (await res.json()).message ?? res.statusText;
+      setRow(preroll, 'ERROR: ' + err, { backgroundColor: reallybad });
+      return;
+    }
+    const data = (await res.json()) as PrerollData;
+    const seconds = data.data.user.prerollFreeTimeSeconds;
+    if (seconds > 0) {
+      setRow(preroll, 'Disabled!', { backgroundColor: ok });
+      adRun = true;
+    } else {
+      if (adRun) {
+        setRow(preroll, "They're back ╯︿╰!", { backgroundColor: meh });
+      } else {
+        setRow(preroll, 'Run the ad you dummy!!', { backgroundColor: bad });
+      }
+    }
+  } catch (e) {
+    setRow(preroll, 'ERROR', { backgroundColor: reallybad });
+  }
+}
 
 async function connectKV() {
   const server = await Kilovolt();
   setRow(stulName, 'OK', { backgroundColor: ok });
-  server.subscribeKey('twitch/stream-info', (newValue) => {
+  const updateStatus = function (newValue) {
     const val = JSON.parse(newValue) as {
       id: string;
       user_name: string;
@@ -62,11 +122,17 @@ async function connectKV() {
     }[];
 
     if (val.length > 0) {
-      setRow(twitchName, 'LIVE', { backgroundColor: ok });
+      setRow(twitchName, `LIVE - ${val[0].user_name}`, { backgroundColor: ok });
+      username = val[0].user_login;
+      twitchLive = true;
+      checkPreroll();
     } else {
       setRow(twitchName, 'Offline', { backgroundColor: bad });
+      twitchLive = false;
     }
-  });
+  };
+  server.getKey('twitch/stream-info').then(updateStatus);
+  server.subscribeKey('twitch/stream-info', updateStatus);
   server.on('stateChange', (ev) => {
     switch (ev.data) {
       case WebSocket.CONNECTING:
@@ -89,6 +155,7 @@ async function run() {
   connectKV();
   setRow(stulName, 'Offline', { backgroundColor: reallybad });
   setRow(twitchName, 'Offline', { backgroundColor: bad });
+  setRow(preroll, 'Not live', { backgroundColor: bad });
 }
 
 run();
