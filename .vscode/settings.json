@@ -1,5 +1,7 @@
 {
   "files.exclude": {
-    "player/videos": true
+    "player/shitposts": true,
+    "player/brb": true,
+    "player/long": true
   }
 }

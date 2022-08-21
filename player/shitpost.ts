@@ -10,7 +10,7 @@ import OBSWebSocket from 'obs-websocket-js';
 import { Kilovolt, OBS } from '../lib/connection-utils';
 
 // @ts-expect-error Assets
-import * as videos from './videos/*';
+import * as videos from './shitposts/*';
 
 async function run() {
   // Connect to strimertul and OBS

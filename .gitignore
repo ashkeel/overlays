@@ -2,4 +2,6 @@ node_modules
 *.local
 dist
 .parcel-cache
-player/videos/*
+player/shitposts/*
+player/long/*
+player/brb/*
