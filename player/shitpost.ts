@@ -6,11 +6,13 @@ import {
   CustomRewardRedemptionEvent,
   EventSubEvent,
 } from '../lib/twitch-types';
-import OBSWebSocket from 'obs-websocket-js';
-import { Kilovolt, OBS } from '../lib/connection-utils';
+//import OBSWebSocket from 'obs-websocket-js';
+import { Kilovolt } from '../lib/connection-utils';
 
 // @ts-expect-error Assets
 import * as videos from './shitposts/*';
+// @ts-expect-error More assets!
+import * as longvideos from './long/*';
 
 async function run() {
   // Connect to strimertul and OBS
@@ -34,7 +36,7 @@ async function run() {
   });
 }
 
-let obs: OBSWebSocket = null;
+//let obs: OBSWebSocket = null;
 
 const player = document.querySelector<HTMLVideoElement>('#videoplayer');
 player.addEventListener('ended', () => {
@@ -42,13 +44,17 @@ player.addEventListener('ended', () => {
     .querySelectorAll('.ytbox')
     .forEach((yt) => yt.classList.replace('fadein', 'fadeout'));
   document.querySelector('#player').classList.remove('show');
-  if (obs) obs.send('SetMute', { source: 'BGM', mute: false });
+  //if (obs) obs.send('SetMute', { source: 'BGM', mute: false });
 });
 export async function playShitpost(name: string): Promise<void> {
   document.querySelector('.fancyname').textContent = name;
   document.querySelector('.unfancyname').textContent = name;
-  let started = false;
-  const videoURLs = Object.values(videos);
+  let chosenvideos = videos;
+  // 1% chance to roll LOOOOONG videos
+  if (Math.random() < 0.01) {
+    chosenvideos = longvideos;
+  }
+  const videoURLs = Object.values(chosenvideos);
   const randomVideo = videoURLs[
     Math.trunc(Math.random() * videoURLs.length)
   ] as string;
@@ -58,17 +64,19 @@ export async function playShitpost(name: string): Promise<void> {
     yt.classList.add('fadein');
   });
   document.querySelector('#player').classList.add('show');
-  if (obs) obs.send('SetMute', { source: 'BGM', mute: true });
+  //if (obs) obs.send('SetMute', { source: 'BGM', mute: true });
   player.play();
 }
 
 export async function initOBS() {
   // Connect to OBS
+  /*
   try {
     obs = await OBS();
   } catch (e) {
     console.warn('OBS not found, disabling OBS integration');
   }
+  */
 }
 
 run();
