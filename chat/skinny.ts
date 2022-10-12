@@ -1,12 +1,13 @@
 import '../lib/sentry';
 import { Howl } from 'howler';
 import { Kilovolt } from '../lib/connection-utils';
-//@ts-expect-error asset
-import chatSound from 'url:../assets/sounds/chat-pop.wav';
 import { renderTwitchMessage, TwitchPrivMsg } from './twitch';
 import { GlimeshChatMessage } from './glimesh';
 import { $el } from '../lib/domutils';
 import { colorNick } from './utils';
+
+//@ts-expect-error asset
+import chatSound from 'url:../assets/sounds/chat-pop.wav';
 
 const mainEl = document.getElementById('chat');
 function makeChatMessage(data: TwitchPrivMsg | GlimeshChatMessage) {
@@ -17,7 +18,7 @@ function makeChatMessage(data: TwitchPrivMsg | GlimeshChatMessage) {
     'Message' in data ? renderTwitchMessage(data) : [data.message];
   const msg = $el('div', { className: 'messagebox' }, [
     'div',
-    { className: 'messagecontent' },
+    { className: 'messagecontent', style: `box-shadow: 2px -2px 0 ${color}` },
     ['div', { className: 'badges' }],
     [
       'div',
@@ -25,12 +26,13 @@ function makeChatMessage(data: TwitchPrivMsg | GlimeshChatMessage) {
         className: 'username',
         style: `color: ${color}`,
       },
+      ['div', { className: 'pin', style: `background: ${color}` }],
       username,
     ],
     ['div', { className: 'message' }, ...message],
   ]);
   mainEl.appendChild(msg);
-  while (mainEl.childElementCount > 20) {
+  while (mainEl.childElementCount > 10) {
     mainEl.removeChild(mainEl.firstChild);
   }
 }

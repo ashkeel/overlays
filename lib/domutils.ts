@@ -17,6 +17,9 @@ export function makeDOM(...desc: [string, ...DOMParam[]]): HTMLElement {
       if (attr.startsWith('@')) {
         el.addEventListener(attr.substr(1), attributes[attr]);
       } else {
+        if (attr.startsWith('data-')) {
+          el.dataset[attr.substring(5)] = attributes[attr];
+        }
         el[attr] = attributes[attr];
       }
     });

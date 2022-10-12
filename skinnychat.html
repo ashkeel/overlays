@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat box</title>
+    <style>
+      /* @import url("http://fonts.cdnfonts.com/css/comic-neue-angular"); */
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Comic Helvetic';
+        font-weight: 100;
+        font-size: 12px;
+        overflow: hidden;
+      }
+      :root {
+        --cloud-bg: #f4f6fa;
+      }
+      body {
+        background-color: rgb(241, 166, 27);
+      }
+      .username {
+        display: flex;
+        font-weight: bold;
+        filter: saturate(200%);
+        text-align: right;
+        justify-content: flex-end;
+        font-family: 'D-DIN';
+      }
+      .username .pin {
+        mask-image: url(assets/images/pin.svg);
+        mask-repeat: no-repeat;
+        -webkit-mask-image: url(assets/images/pin.svg);
+        -webkit-mask-repeat: no-repeat;
+        width: 10px;
+        height: 15px;
+        margin-right: 5px;
+      }
+      .messagecontent {
+        display: flex;
+        flex-direction: column-reverse;
+        border-radius: 3px;
+        padding: 5px 5px 0px 5px;
+        background: #f4f6fa;
+        background-image: url(assets/images/sea.svg);
+        background-position: 0 -20px;
+        background-repeat: no-repeat;
+        box-shadow: 2px -2px 0 red;
+      }
+      .messagebox {
+        margin: 5px 0;
+        color: rgb(28, 31, 34);
+        position: relative;
+        width: auto;
+        flex-grow: 0;
+        flex-shrink: 1;
+        max-width: 100px;
+      }
+      .message {
+        padding: 0;
+        text-align: left;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-clamp: 3;
+        display: -webkit-box;
+        -webkit-line-clamp: 4;
+        -webkit-box-orient: vertical;
+        max-height: 72px;
+      }
+      #chat {
+        margin: 0 10px;
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: flex-start;
+        justify-content: flex-start;
+        height: 100vh;
+      }
+      #chat > .messagebox {
+        animation: fadeIn 0.3s ease forwards, fadeOut 0.7s ease 20s forwards;
+        -webkit-animation: fadeIn 0.3s ease forwards,
+          fadeOut 0.7s ease 20s forwards;
+      }
+      img.emote {
+        display: inline-block;
+        padding: 0 3px;
+        margin-bottom: -5px;
+        margin-top: -3px;
+      }
+      @keyframes fadeIn {
+        0% {
+          opacity: 0;
+          transform: skewY(-10deg) translateX(-10px) rotateX(50deg);
+        }
+        100% {
+          opacity: 1;
+          transform: skewY(-1deg);
+        }
+      }
+      @keyframes fadeOut {
+        0% {
+          opacity: 1;
+        }
+        30% {
+          transform: scaleY(0.1);
+          opacity: 1;
+          height: auto;
+        }
+        60% {
+          transform: scaleY(0.05) skewY(-4deg) translateX(-150px);
+        }
+        80% {
+          transform: translateX(-150px);
+          opacity: 0;
+        }
+        100% {
+          height: 0px;
+          margin: 0;
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="cloud large cloud-1">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <main id="chat"></main>
+    <script type="module">
+      import './chat/skinny';
+    </script>
+  </body>
+</html>
