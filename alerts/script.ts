@@ -83,8 +83,9 @@ async function run() {
   });
 
   // Start subscription for twitch events
-  server.subscribeKey('stulbe/ev/webhook', async (newValue) => {
+  server.subscribeKey('twitch/ev/eventsub-event', async (newValue) => {
     const ev = JSON.parse(newValue) as EventSubEvent;
+    console.log(ev);
     switch (ev.subscription.type) {
       case 'channel.follow':
         alertQueue.push({
@@ -120,6 +121,7 @@ async function run() {
           total: sub.event.cumulative_months,
           streak: sub.event.streak_months,
         });
+        setTimeout(deduplicateSubs.bind(this, sub.event.user_name), 5000);
         break;
       }
       case 'channel.cheer': {

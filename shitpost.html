@@ -21,17 +21,21 @@
       }
       @keyframes fadein {
         from {
+          transform: rotate(5deg) translateY(-100px);
           opacity: 0;
         }
         to {
+          transform: rotate(-1deg);
           opacity: 1;
         }
       }
       @keyframes fadeout {
         from {
+          transform: rotate(-1deg);
           opacity: 1;
         }
         to {
+          transform: rotate(2deg) translateY(20px);
           opacity: 0;
         }
       }
@@ -40,32 +44,14 @@
         position: absolute;
         top: 60px;
         left: 60px;
-        width: 711px;
+        width: auto;
         height: 400px;
-        padding: 10pt;
-        background: linear-gradient(to bottom, #e657d3, #dd3f7c);
+        padding: 12pt;
+        background: linear-gradient(to top, #f0c29f, #edeab2);
         border-radius: 10px;
       }
-      .deco1 {
-        z-index: -1;
-        top: 65px;
-        left: 65px;
-        background: linear-gradient(to bottom, #da57e6, #dd3fae);
-      }
-      .deco2 {
-        z-index: -2;
-        top: 70px;
-        left: 70px;
-        background: linear-gradient(to bottom, #bd57e6, #dd3fc3);
-      }
-      .fadein.deco2 {
-        animation-delay: 0;
-      }
-      .fadein.deco1 {
-        animation-delay: 100ms;
-      }
       .fadein.realbox {
-        animation-delay: 200ms;
+        animation-delay: 80ms;
       }
       .fadeout.realbox {
         animation-delay: 0;
@@ -90,7 +76,7 @@
         font-size: 25pt;
         font-family: 'Fugaz One', cursive;
         color: white;
-        text-shadow: 4px 4px 1px rgba(0, 0, 0, 0.8);
+        text-shadow: 4px 4px 1px rgb(68, 24, 11);
       }
       #player {
         visibility: hidden;
@@ -133,20 +119,34 @@
         white-space: nowrap;
       }
       #videoplayer {
-        width: 711px;
+        width: auto;
         height: 400px;
         margin: 0 auto;
         background-color: black;
+        min-width: 300px;
+      }
+      .ytbox.special {
+        background: conic-gradient(
+          rgba(255, 0, 0, 1) 0%,
+          rgba(255, 154, 0, 1) 10%,
+          rgba(208, 222, 33, 1) 20%,
+          rgba(79, 220, 74, 1) 30%,
+          rgba(63, 218, 216, 1) 40%,
+          rgba(47, 201, 226, 1) 50%,
+          rgba(28, 127, 238, 1) 60%,
+          rgba(95, 21, 242, 1) 70%,
+          rgba(186, 12, 248, 1) 80%,
+          rgba(251, 7, 217, 1) 90%,
+          rgba(255, 0, 0, 1) 100%
+        );
       }
     </style>
   </head>
   <body>
-    <div class="ytbox ytbox-deco deco1"></div>
-    <div class="ytbox ytbox-deco deco2"></div>
     <div class="ytbox realbox" id="alertbox">
       <div id="player"><video id="videoplayer"></video></div>
       <div class="infotext">
-        <div class="redeem-tx">reedemed by</div>
+        <div class="redeem-tx">With love,</div>
         <div class="namehack">
           <span class="unfancyname">namehere</span>
           <span class="fancyname">namehere</span>

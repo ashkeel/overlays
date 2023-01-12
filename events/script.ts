@@ -45,7 +45,7 @@ async function run() {
   const server = await Kilovolt();
 
   // Start subscription for twitch events
-  server.subscribeKey('stulbe/ev/webhook', async (newValue) => {
+  server.subscribeKey('twitch/ev/eventsub-event', async (newValue) => {
     const ev = JSON.parse(newValue) as EventSubEvent;
     switch (ev.subscription.type) {
       case 'channel.channel_points_custom_reward_redemption.add': {
