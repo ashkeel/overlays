@@ -39,17 +39,6 @@
           opacity: 0;
         }
       }
-      .ytbox {
-        opacity: 0;
-        position: absolute;
-        top: 60px;
-        left: 60px;
-        width: auto;
-        height: 400px;
-        padding: 12pt;
-        background: linear-gradient(to top, #f0c29f, #edeab2);
-        border-radius: 10px;
-      }
       .fadein.realbox {
         animation-delay: 80ms;
       }
@@ -73,7 +62,7 @@
         left: 15pt;
         right: 0pt;
         text-align: left;
-        font-size: 25pt;
+        font-size: 30pt;
         font-family: 'Fugaz One', cursive;
         color: white;
         text-shadow: 4px 4px 1px rgb(68, 24, 11);
@@ -118,6 +107,17 @@
         position: absolute;
         white-space: nowrap;
       }
+      .ytbox {
+        opacity: 0;
+        position: absolute;
+        top: 60px;
+        left: 60px;
+        width: auto;
+        height: 400px;
+        padding: 12pt;
+        background: linear-gradient(to top, #f0c29f, #edeab2);
+        border-radius: 10px;
+      }
       #videoplayer {
         width: auto;
         height: 400px;
@@ -126,6 +126,7 @@
         min-width: 300px;
       }
       .ytbox.special {
+        height: 500px;
         background: conic-gradient(
           rgba(255, 0, 0, 1) 0%,
           rgba(255, 154, 0, 1) 10%,
@@ -139,6 +140,9 @@
           rgba(251, 7, 217, 1) 90%,
           rgba(255, 0, 0, 1) 100%
         );
+      }
+      .ytbox.special #videoplayer {
+        height: 500px;
       }
     </style>
   </head>

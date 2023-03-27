@@ -5,7 +5,7 @@
     "..."
   ],
   "transformers": {
-    "*.{mp4,webm}": [
+    "*.{mp4,webm,mov}": [
       "@parcel/transformer-raw"
     ]
   }

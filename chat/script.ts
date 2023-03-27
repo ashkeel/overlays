@@ -54,9 +54,11 @@ async function run() {
   (await kv.getJSON<TwitchPrivMsg[]>('twitch/chat-history'))?.forEach(
     makeChatMessage
   );
+  /*
   (await kv.getJSON<GlimeshChatMessage[]>('glimesh/chat-history'))?.forEach(
     makeChatMessage
   );
+  */
 }
 
 run();
