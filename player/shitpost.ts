@@ -21,17 +21,12 @@ async function run() {
   const strimertul = new Strimertul({ kv });
 
   // Start subscription for twitch events
-  strimertul.twitch.event.onRedeem(async (ev) => {
-    switch (ev.subscription.type) {
-      case 'channel.channel_points_custom_reward_redemption.add': {
-        const redeem = ev as CustomRewardRedemptionEvent;
-        switch (redeem.event.reward.id) {
-          case '66ce0b06-1f39-4742-81c2-962dbf98fb06': // Shitpost time
-            //TODO queue them up!
-            playShitpost(redeem.event.user_name);
-            break;
-        }
-      }
+  strimertul.twitch.event.onRedeem(async (redeem) => {
+    switch (redeem.event.reward.id) {
+      case '66ce0b06-1f39-4742-81c2-962dbf98fb06': // Shitpost time
+        //TODO queue them up!
+        playShitpost(redeem.event.user_name);
+        break;
     }
   });
 }
