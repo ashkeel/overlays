@@ -2,6 +2,7 @@
 /* eslint-disable default-case */
 import '../lib/sentry';
 
+import { Strimertul } from '@strimertul/strimertul';
 import {
   CustomRewardRedemptionEvent,
   EventSubEvent,
@@ -16,11 +17,11 @@ import * as longvideos from './long/*';
 
 async function run() {
   // Connect to strimertul and OBS
-  const server = await Kilovolt();
+  const kv = await Kilovolt();
+  const strimertul = new Strimertul({ kv });
 
   // Start subscription for twitch events
-  server.subscribeKey('twitch/ev/eventsub-event', async (newValue) => {
-    const ev = JSON.parse(newValue) as EventSubEvent;
+  strimertul.twitch.event.onRedeem(async (ev) => {
     switch (ev.subscription.type) {
       case 'channel.channel_points_custom_reward_redemption.add': {
         const redeem = ev as CustomRewardRedemptionEvent;

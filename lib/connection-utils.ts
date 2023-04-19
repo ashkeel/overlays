@@ -11,12 +11,11 @@ export async function OBS(): Promise<ObsWebSocket> {
 }
 
 export async function Kilovolt(): Promise<KilovoltWS> {
-  const kv = new KilovoltWS(
-    process.env.VITE_KILOVOLT_ENDPOINT,
-    process.env.VITE_KILOVOLT_PASSWORD,
-    { reconnect: true }
-  );
-  await kv.wait();
+  const kv = new KilovoltWS(process.env.VITE_KILOVOLT_ENDPOINT, {
+    reconnect: true,
+    password: process.env.VITE_KILOVOLT_PASSWORD,
+  });
+  await kv.connect();
   return kv;
 }
 

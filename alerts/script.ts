@@ -85,7 +85,6 @@ async function run() {
   // Start subscription for twitch events
   server.subscribeKey('twitch/ev/eventsub-event', async (newValue) => {
     const ev = JSON.parse(newValue) as EventSubEvent;
-    console.log(ev);
     switch (ev.subscription.type) {
       case 'channel.follow':
         alertQueue.push({

@@ -3,13 +3,14 @@ import { Howl } from 'howler';
 import { Kilovolt } from '../lib/connection-utils';
 //@ts-expect-error asset
 import chatSound from 'url:../assets/sounds/chat-pop.wav';
-import { renderTwitchMessage, TwitchPrivMsg } from './twitch';
+import { renderTwitchMessage } from './twitch';
 import { GlimeshChatMessage } from './glimesh';
 import { $el } from '../lib/domutils';
 import { colorNick } from './utils';
+import { Strimertul, TwitchChatMessage } from '@strimertul/strimertul';
 
 const mainEl = document.getElementById('chat');
-function makeChatMessage(data: TwitchPrivMsg | GlimeshChatMessage) {
+function makeChatMessage(data: TwitchChatMessage | GlimeshChatMessage) {
   const color =
     'Tags' in data ? data.Tags.color : colorNick(data.user.username);
   const username = 'user' in data ? data.user.username : data.User.DisplayName;
@@ -40,9 +41,10 @@ const chatSprite = new Howl({ src: [chatSound] });
 async function run() {
   // Connect to server
   const kv = await Kilovolt();
+  const strimertul = new Strimertul({ kv });
 
-  kv.subscribeKey('twitch/ev/chat-message', (newVal) => {
-    makeChatMessage(JSON.parse(newVal));
+  strimertul.twitch.chat.onMessage((message) => {
+    makeChatMessage(message);
     chatSprite.play();
   });
 
@@ -51,7 +53,7 @@ async function run() {
     chatSprite.play();
   });
 
-  (await kv.getJSON<TwitchPrivMsg[]>('twitch/chat-history'))?.forEach(
+  (await kv.getJSON<TwitchChatMessage[]>('twitch/chat-history'))?.forEach(
     makeChatMessage
   );
   /*

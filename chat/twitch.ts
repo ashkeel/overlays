@@ -1,38 +1,10 @@
-export interface TwitchUser {
-  ID: string;
-  Name: string;
-  DisplayName: string;
-  Color: string;
-  Badges: Record<string, number>;
-}
-
-export interface TwitchEmote {
-  Name: string;
-  ID: string;
-  Count: number;
-}
-
-export interface TwitchPrivMsg {
-  User: TwitchUser;
-  Raw: string;
-  Type: number;
-  RawType: string;
-  Tags: Record<string, string>;
-  Message: string;
-  Channel: string;
-  RoomID: string;
-  ID: string;
-  Time: Date;
-  Emotes: TwitchEmote[];
-  Bits: number;
-  Action: boolean;
-}
+import { TwitchChatMessage, TwitchEmote } from '@strimertul/strimertul';
 
 export function emoteURL(emote: TwitchEmote): string {
   return `https://static-cdn.jtvnw.net/emoticons/v2/${emote.ID}/default/dark/1.0`;
 }
 
-export function renderTwitchMessage(data: TwitchPrivMsg) {
+export function renderTwitchMessage(data: TwitchChatMessage) {
   let message = [data.Message];
   if (data.Emotes) {
     data.Emotes.forEach((emote) => {

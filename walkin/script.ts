@@ -1,7 +1,7 @@
 import { Howl } from 'howler';
+import { Strimertul } from '@strimertul/strimertul';
 import { animate } from '../alerts/sync';
 import { Kilovolt } from '../lib/connection-utils';
-import { TwitchPrivMsg } from '../chat/twitch';
 import { $el } from '../lib/domutils';
 import { delay } from '../lib/sync';
 
@@ -83,14 +83,14 @@ const storeKey = 'overlay/regulars/lastMessage';
 async function run() {
   // Connect to server
   const kv = await Kilovolt();
+  const strimertul = new Strimertul({ kv });
 
   try {
     lastMessageTable = await kv.getJSON(storeKey);
   } catch (e) {
     lastMessageTable = {};
   }
-  kv.subscribeKey('twitch/ev/chat-message', (chatPayload) => {
-    const messageData = JSON.parse(chatPayload) as TwitchPrivMsg;
+  strimertul.twitch.chat.onMessage((messageData) => {
     const name = messageData.User.Name;
     if (!regulars.includes(name)) {
       return;

@@ -1,9 +1,6 @@
-import Kilovolt from '@strimertul/kilovolt-client';
-import {
-  CustomRewardRedemptionEvent,
-  EventSubEvent,
-} from '../lib/twitch-types';
+import { Strimertul } from '@strimertul/strimertul';
 import { Kilovolt as KV } from '../lib/connection-utils';
+import { CustomRewardRedemptionEvent } from '../lib/twitch-types';
 import { spin } from './wheel';
 
 const main = document.querySelector('main');
@@ -54,42 +51,34 @@ const redeemWheel = [
   'Nya-speak for 10 minutes',
 ];
 
-let server: Kilovolt;
-
 async function run() {
   // Connect to strimertul and OBS
-  server = await KV();
+  const kv = await KV();
+  const strimertul = new Strimertul({ kv });
 
   // Start subscription for twitch events
-  server.subscribeKey('twitch/ev/eventsub-event', async (newValue) => {
-    const ev = JSON.parse(newValue) as EventSubEvent;
+  strimertul.twitch.event.onRedeem((ev) => {
     switch (ev.subscription.type) {
       case 'channel.channel_points_custom_reward_redemption.add':
         const redeem = ev as CustomRewardRedemptionEvent;
         switch (redeem.event.reward.id) {
           case '7136dcc8-f1ec-4f75-93a5-e0da19f0bcff': // Minigame break
             spin(main, 'MINIGAME WHEEL', minigames, (picked) => {
-              server.putKey(
-                'twitch/@send-chat-message',
+              strimertul.twitch.chat.writeMessage(
                 `Minigame break game: ${picked}`
               );
             });
             break;
-          case '0f487953-fe97-4477-a41f-5c18c607da89':
+          case '0f487953-fe97-4477-a41f-5c18c607da89': // Super wheel
             spin(
               main,
               'SUPER WHEEL',
               [...redeemWheel, ...redeemWheel],
               (picked) => {
-                server.putKey(
-                  'twitch/@send-chat-message',
-                  `Super redeem: ${picked}`
-                );
+                strimertul.twitch.chat.writeMessage(`Super redeem: ${picked}`);
               }
             );
             break;
-          default:
-            console.log(redeem.event.reward.id);
         }
     }
   });
