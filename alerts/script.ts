@@ -86,12 +86,14 @@ async function run() {
   server.subscribeKey('twitch/ev/eventsub-event', async (newValue) => {
     const ev = JSON.parse(newValue) as EventSubEvent;
     switch (ev.subscription.type) {
+      /*
       case 'channel.follow':
         alertQueue.push({
           type: 'follow',
           user: (ev as TwitchFollowEvent).event.user_name,
         });
         break;
+      */
       case 'channel.subscribe': {
         const sub = ev as SubscriptionEvent;
         if (!(sub.event.user_name in impendingSubs)) {
