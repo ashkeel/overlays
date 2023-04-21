@@ -13,6 +13,10 @@ import zelko from 'url:./sounds/zelko.mp3';
 import sentai from 'url:./sounds/sentai.mp3';
 //@ts-expect-error asset
 import cyg from 'url:./sounds/cyg.ogg';
+//@ts-expect-error asset
+import sonicchan from 'url:./sounds/sonicchan.ogg';
+//@ts-expect-error asset
+import catboy from 'url:./sounds/catboy.ogg';
 
 import anime from 'animejs';
 
@@ -22,9 +26,10 @@ const sounds = {
   zelkovatype8: new Howl({ src: [zelko] }),
   sentai_vt: new Howl({ src: [sentai] }),
   cygnuspykeman: new Howl({ src: [cyg] }),
+  enfieldvt: new Howl({ src: [catboy] }),
+  sonic_chan: new Howl({ src: [sonicchan] }),
 };
 
-const regulars = ['sentai_vt', 'cygnuspykeman', 'zelkovatype8'];
 let lastMessageTable: Record<string, number> = {};
 
 const isOldEnough = (timestamp: number) =>
@@ -92,7 +97,7 @@ async function run() {
   }
   strimertul.twitch.chat.onMessage((messageData) => {
     const name = messageData.User.Name;
-    if (!regulars.includes(name)) {
+    if (!(name in sounds)) {
       return;
     }
     const hasWalkedIn =
