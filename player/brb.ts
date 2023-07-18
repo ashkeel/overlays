@@ -1,9 +1,6 @@
-/* eslint-disable import/no-unresolved */
-/* eslint-disable default-case */
 import '../lib/sentry';
 
-// @ts-expect-error Assets
-import * as videos from './brb/*';
+const videos = import.meta.glob('./brb/*', { as: 'url', eager: true });
 
 const videoURLs = Object.values(videos);
 const randomVideo = videoURLs[

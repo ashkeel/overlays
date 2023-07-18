@@ -7,8 +7,7 @@ import { GlimeshChatMessage } from './glimesh';
 import { $el } from '../lib/domutils';
 import { colorNick } from './utils';
 
-//@ts-expect-error asset
-import chatSound from 'url:../assets/sounds/chat-pop.wav';
+import chatSound from '../assets/sounds/chat-pop.wav';
 
 const mainEl = document.getElementById('chat');
 function makeChatMessage(data: TwitchChatMessage | GlimeshChatMessage) {

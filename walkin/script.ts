@@ -5,18 +5,12 @@ import { Kilovolt } from '../lib/connection-utils';
 import { $el } from '../lib/domutils';
 import { delay } from '../lib/sync';
 
-//@ts-expect-error asset
-import vineBoom from 'url:./sounds/vineboom.mp3';
-//@ts-expect-error asset
-import zelko from 'url:./sounds/zelko.mp3';
-//@ts-expect-error asset
-import sentai from 'url:./sounds/sentai.mp3';
-//@ts-expect-error asset
-import cyg from 'url:./sounds/cyg.ogg';
-//@ts-expect-error asset
-import sonicchan from 'url:./sounds/sonicchan.ogg';
-//@ts-expect-error asset
-import catboy from 'url:./sounds/catboy.ogg';
+import vineBoom from './sounds/vineboom.mp3';
+import zelko from './sounds/zelko.mp3';
+import sentai from './sounds/sentai.mp3';
+import cyg from './sounds/cyg.ogg';
+import sonicchan from './sounds/sonicchan.ogg';
+import catboy from './sounds/catboy.ogg';
 
 import anime from 'animejs';
 

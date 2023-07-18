@@ -73,7 +73,7 @@ async function checkPreroll() {
   try {
     const res = await fetch('https://gql.twitch.tv/gql', {
       headers: {
-        'Client-Id': process.env.VITE_TWITCH_TOKEN,
+        'Client-Id': import.meta.env.VITE_TWITCH_TOKEN,
         'Content-Type': 'application/json',
       },
       body:
@@ -134,7 +134,9 @@ async function connectKV() {
   server.getKey('twitch/stream-info').then(updateStatus);
   server.subscribeKey('twitch/stream-info', updateStatus);
   server.on('stateChange', (ev) => {
-    switch (ev.data) {
+    // TODO fix this!!!
+    const event = ev as unknown as { data: number };
+    switch (event.data) {
       case WebSocket.CONNECTING:
         setRow(stulName, 'Connecting...', {});
         break;
@@ -145,7 +147,7 @@ async function connectKV() {
         setRow(stulName, 'Offline', { backgroundColor: reallybad });
         break;
       default:
-        console.log('unknown status ' + ev.data);
+        console.log('unknown status ' + event.data);
     }
   });
 }

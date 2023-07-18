@@ -3,17 +3,10 @@
 import '../lib/sentry';
 
 import { Strimertul } from '@strimertul/strimertul';
-import {
-  CustomRewardRedemptionEvent,
-  EventSubEvent,
-} from '../lib/twitch-types';
-//import OBSWebSocket from 'obs-websocket-js';
 import { Kilovolt } from '../lib/connection-utils';
 
-// @ts-expect-error Assets
-import * as videos from './shitposts/*';
-// @ts-expect-error More assets!
-import * as longvideos from './long/*';
+const videos = import.meta.glob('./shitposts/*', { as: 'url', eager: true });
+const longvideos = import.meta.glob('./long/*', { as: 'url', eager: true });
 
 async function run() {
   // Connect to strimertul and OBS

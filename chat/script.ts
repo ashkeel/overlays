@@ -1,8 +1,7 @@
 import '../lib/sentry';
 import { Howl } from 'howler';
 import { Kilovolt } from '../lib/connection-utils';
-//@ts-expect-error asset
-import chatSound from 'url:../assets/sounds/chat-pop.wav';
+import chatSound from '../assets/sounds/chat-pop.wav';
 import { renderTwitchMessage } from './twitch';
 import { GlimeshChatMessage } from './glimesh';
 import { $el } from '../lib/domutils';

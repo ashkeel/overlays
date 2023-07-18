@@ -2,14 +2,12 @@ import anime from 'animejs';
 import { Howl } from 'howler';
 import JSConfetti from 'js-confetti';
 import { delay } from '../lib/sync';
-//@ts-expect-error asset
-import drop from 'url:../assets/sounds/airhornplus.mp3';
-//@ts-expect-error asset
-import muzik from 'url:../assets/sounds/okcut.mp3';
-//@ts-expect-error asset
-import tick from 'url:../assets/sounds/tick.wav';
 import { animate } from '../alerts/sync';
 import { $el } from '../lib/domutils';
+
+import drop from '../assets/sounds/airhornplus.mp3';
+import muzik from '../assets/sounds/okcut.mp3';
+import tick from '../assets/sounds/tick.wav';
 
 const wheelSprite = new Howl({ src: [tick] });
 const dropSprite = new Howl({ src: [drop] });

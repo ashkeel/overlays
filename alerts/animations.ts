@@ -2,8 +2,7 @@ import anime from 'animejs';
 import { Howl } from 'howler';
 import { $el } from '../lib/domutils';
 
-//@ts-expect-error asset
-import followWoosh from 'url:../assets/sounds/follow-woosh.wav';
+import followWoosh from '../assets/sounds/follow-woosh.wav';
 
 import { animate } from './sync';
 import { FollowAlert, SubAlert, RaidAlert, CheerAlert } from './types';
