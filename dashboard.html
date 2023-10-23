@@ -34,10 +34,28 @@
       th {
         text-align: left;
       }
+      #buttons {
+        display: flex;
+      }
+      #buttons button {
+        flex: 1;
+        padding: 5px;
+        border: 0;
+        border-radius: 2px;
+        margin-top: 2px;
+        background-color: #444;
+        color: rgb(222, 222, 222);
+        cursor: pointer;
+        min-height: 33px;
+      }
+      #buttons button:hover {
+        background-color: #666;
+      }
     </style>
   </head>
   <body>
     <table id="statuses"></table>
+    <div id="buttons"></div>
     <script type="module">
       import './dashboard/script';
     </script>
