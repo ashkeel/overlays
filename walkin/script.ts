@@ -11,6 +11,7 @@ import sentai from './sounds/sentai.mp3';
 import cyg from './sounds/cyg.ogg';
 import sonicchan from './sounds/sonicchan.ogg';
 import catboy from './sounds/catboy.ogg';
+import selectoption from './sounds/select_option.wav';
 
 import anime from 'animejs';
 
@@ -22,6 +23,7 @@ const sounds = {
   cygnuspykeman: new Howl({ src: [cyg] }),
   enfieldvt: new Howl({ src: [catboy] }),
   sonic_chan: new Howl({ src: [sonicchan] }),
+  festivebop: new Howl({ src: [selectoption] }),
 };
 
 let lastMessageTable: Record<string, number> = {};
