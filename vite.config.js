@@ -16,6 +16,7 @@ module.exports = {
         shitpost: resolve(__dirname, 'shitpost.html'),
         //music: resolve(__dirname, 'music.html'),
         dashboard: resolve(__dirname, 'dashboard.html'),
+        micstatus: resolve(__dirname, 'micstatus.html'),
       },
     },
   },

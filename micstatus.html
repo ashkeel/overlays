@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MIC STATUS</title>
+    <style>
+      :root {
+        --red-bg: #b31301;
+      }
+      body,
+      html {
+        background-color: black;
+        margin: 0;
+        padding: 0;
+        font-family: 'Iosevka SS06';
+      }
+      @keyframes blink {
+        0% {
+          background-color: var(--red-bg);
+        }
+        50% {
+          background-color: transparent;
+        }
+        100% {
+          background-color: var(--red-bg);
+        }
+      }
+      #status {
+        background-color: #222;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+      }
+      #status.muted {
+        animation: blink 1s infinite;
+        animation-timing-function: step-start;
+      }
+      #status article {
+        display: none;
+        font-size: calc(100vmin / 3);
+        overflow: hidden;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #status:not(.muted) article.is-not-muted {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #status.muted article.is-muted {
+        display: flex;
+        color: red;
+      }
+      article.error {
+        color: red;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="status">
+      <article class="is-muted">MUTED</article>
+      <article class="is-not-muted error">ERROR XLR</article>
+    </div>
+    <script type="module">
+      import './dashboard/mic';
+    </script>
+  </body>
+</html>
