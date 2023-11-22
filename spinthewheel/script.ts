@@ -38,16 +38,12 @@ const minigames = [
 
 const redeemWheel = [
   'Booba mode',
-  'Sonic model',
   'Nothing',
-  'ASMR',
   'Get on the wall',
-  'Spin the other wheel',
-  'Make me tweet something',
-  'Ash rates you',
   'Ara Ara~',
   'Get scammed',
   'Nya-speak for 10 minutes',
+  'AD time!',
 ];
 
 async function run() {
