@@ -2,8 +2,8 @@
 /* eslint-disable default-case */
 import '../lib/sentry';
 
-import { Strimertul } from '@strimertul/strimertul';
 import { Kilovolt } from '../lib/connection-utils';
+import { CustomRewardRedemptionEvent } from 'lib/twitch-types.ts';
 
 const videos = import.meta.glob('./shitposts/*', { as: 'url', eager: true });
 const longvideos = import.meta.glob('./long/*', { as: 'url', eager: true });
@@ -11,17 +11,20 @@ const longvideos = import.meta.glob('./long/*', { as: 'url', eager: true });
 async function run() {
   // Connect to strimertul and OBS
   const kv = await Kilovolt();
-  const strimertul = new Strimertul({ kv });
 
   // Start subscription for twitch events
-  strimertul.twitch.event.onRedeem(async (redeem) => {
-    switch (redeem.event.reward.id) {
-      case '66ce0b06-1f39-4742-81c2-962dbf98fb06': // Shitpost time
-        //TODO queue them up!
-        playShitpost(redeem.event.user_name);
-        break;
+  kv.subscribeKey(
+    'twitch/ev/eventsub-event/channel.channel_points_custom_reward_redemption.add',
+    (newVal) => {
+      const redeem = JSON.parse(newVal) as CustomRewardRedemptionEvent;
+      switch (redeem.event.reward.id) {
+        case '66ce0b06-1f39-4742-81c2-962dbf98fb06': // Shitpost time
+          //TODO queue them up!
+          playShitpost(redeem.event.user_name);
+          break;
+      }
     }
-  });
+  );
 }
 
 //let obs: OBSWebSocket = null;

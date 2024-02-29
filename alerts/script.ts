@@ -5,17 +5,14 @@ import '../lib/sentry';
 import {
   CheerEvent,
   EventSubEvent,
-  FollowEvent as TwitchFollowEvent,
   RaidEvent,
   ResubscriptionEvent,
   SubscriptionEvent,
 } from '../lib/twitch-types';
 
-import { FollowEvent as GlimeshFollowEvent } from '../lib/glimesh-types';
-
 import { Kilovolt } from '../lib/connection-utils';
 import { AlertData, SubAlert } from './types';
-import { followAnim, subAnim, cheerAnim, raidAnim } from './animations';
+import { subAnim, cheerAnim, raidAnim } from './animations';
 
 const alertQueue: AlertData[] = [];
 let isPlaying = false;
@@ -23,9 +20,6 @@ let isPlaying = false;
 async function playAlert(alertData: AlertData) {
   isPlaying = true;
   switch (alertData.type) {
-    case 'follow':
-      await followAnim(alertData);
-      break;
     case 'sub':
       await subAnim(alertData);
       break;
@@ -73,27 +67,10 @@ async function run() {
   // Connect to strimertul and OBS
   const server = await Kilovolt();
 
-  // Start subscription for glimesh events
-  server.subscribeKey('glimesh/ev/follow', async (newValue) => {
-    const ev = JSON.parse(newValue) as GlimeshFollowEvent;
-    alertQueue.push({
-      type: 'follow',
-      user: ev.user.displayname || ev.user.username,
-    });
-  });
-
   // Start subscription for twitch events
-  server.subscribeKey('twitch/ev/eventsub-event', async (newValue) => {
+  server.subscribePrefix('twitch/ev/eventsub-event/', async (newValue) => {
     const ev = JSON.parse(newValue) as EventSubEvent;
     switch (ev.subscription.type) {
-      /*
-      case 'channel.follow':
-        alertQueue.push({
-          type: 'follow',
-          user: (ev as TwitchFollowEvent).event.user_name,
-        });
-        break;
-      */
       case 'channel.subscribe': {
         const sub = ev as SubscriptionEvent;
         if (!(sub.event.user_name in impendingSubs)) {

@@ -1,5 +1,4 @@
 import { Howl } from 'howler';
-import { Strimertul } from '@strimertul/strimertul';
 import { animate } from '../alerts/sync';
 import { Kilovolt } from '../lib/connection-utils';
 import { $el } from '../lib/domutils';
@@ -14,13 +13,14 @@ import catboy from './sounds/catboy.ogg';
 import selectoption from './sounds/select_option.wav';
 
 import anime from 'animejs';
+import { TwitchEventSubChatMessage } from 'chat/twitch.ts';
 
 const vineBoomSound = new Howl({ src: [vineBoom] });
 
 const sounds = {
-  zelkovatype8: new Howl({ src: [zelko] }),
+  zel_hachigo: new Howl({ src: [zelko] }),
   sentai_vt: new Howl({ src: [sentai] }),
-  cygnuspykeman: new Howl({ src: [cyg] }),
+  cygnus_pikemen: new Howl({ src: [cyg] }),
   enfieldvt: new Howl({ src: [catboy] }),
   sonic_chan: new Howl({ src: [sonicchan] }),
   festivebop: new Howl({ src: [selectoption] }),
@@ -84,15 +84,15 @@ const storeKey = 'overlay/regulars/lastMessage';
 async function run() {
   // Connect to server
   const kv = await Kilovolt();
-  const strimertul = new Strimertul({ kv });
 
   try {
     lastMessageTable = await kv.getJSON(storeKey);
   } catch (e) {
     lastMessageTable = {};
   }
-  strimertul.twitch.chat.onMessage((messageData) => {
-    const name = messageData.User.Name;
+  kv.subscribeKey('twitch/ev/eventsub-event/channel.chat.message', (newVal) => {
+    const data = JSON.parse(newVal) as { event: TwitchEventSubChatMessage };
+    const name = data.event.chatter_user_login;
     if (!(name in sounds)) {
       return;
     }

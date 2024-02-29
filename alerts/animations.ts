@@ -30,59 +30,6 @@ function animScript(text: string): HTMLElement {
   return $el('div', { className: 'anim-wrapper' }, ...letters);
 }
 
-export async function followAnim(alertData: FollowAlert) {
-  const div = animScript('New follow');
-  staging.appendChild(div);
-  followSprite.play();
-  await animate({
-    targets: div.querySelectorAll('.letter'),
-    translateX: -150,
-    translateY: -160,
-    rotate: '1turn',
-    duration: 800,
-    easing: 'easeOutCubic',
-    delay: anime.stagger(50),
-  });
-  await delay(1700);
-  anime({
-    targets: div.querySelectorAll('.letter'),
-    duration: 400,
-    translateX: -180,
-    translateY: -220,
-    easing: 'easeOutBack',
-    fontSize: '35pt',
-    delay: 200,
-  });
-  const userdiv = animScript(alertData.user);
-  staging.appendChild(userdiv);
-  anime({
-    targets: userdiv.querySelectorAll('.letter'),
-    translateX: -150,
-    translateY: -160,
-    rotate: '1turn',
-    duration: 400,
-    easing: 'easeOutCubic',
-    delay: anime.stagger(50),
-  });
-  await delay(3000);
-  await animate({
-    targets: [
-      div.querySelectorAll('.letter'),
-      userdiv.querySelectorAll('.letter'),
-    ],
-    duration: 200,
-    easing: 'easeOutCubic',
-    scaleX: 0.8,
-    scaleY: 0,
-    rotate: () => `${anime.random(0, 40)}deg`,
-    translateX: () => anime.random(-170, -220),
-    translateY: () => anime.random(-160, -200),
-    delay: anime.stagger(20),
-  });
-  staging.removeChild(div);
-  staging.removeChild(userdiv);
-}
-
 export async function subAnim(alertData: SubAlert) {
   let div: HTMLElement = null;
   if (alertData.total) {
