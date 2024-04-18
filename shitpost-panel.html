@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shitpost panel</title>
+    <style>
+      html {
+        background-color: #222;
+        color: white;
+        font-family: Inter;
+      }
+
+      button {
+        background-color: #444;
+        color: white;
+        border: none;
+        padding: 10px;
+        margin: 10px;
+        cursor: pointer;
+        border-radius: 10px;
+        &:hover {
+          background-color: #555;
+        }
+      }
+
+      input,
+      select {
+        background-color: #444;
+        color: white;
+        border: none;
+        padding: 10px;
+        margin: 10px;
+        border-radius: 10px;
+      }
+
+      main {
+        display: grid;
+        grid-template-columns: 300px 200px;
+      }
+
+      #shitpost-list li {
+        cursor: pointer;
+        margin-bottom: 0.6rem;
+      }
+      #shitpost-list li:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <input disabled id="last-shitpost" /><button id="replay-last">
+        Replay last shitpost
+      </button>
+      <select id="replay-select"></select>
+      <button id="replay-selected">Replay selected shitpost</button>
+    </main>
+    <ul id="shitpost-list"></ul>
+    <script type="module">
+      import './player/panel';
+    </script>
+  </body>
+</html>

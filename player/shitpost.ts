@@ -3,13 +3,14 @@
 import '../lib/sentry';
 
 import { Kilovolt } from '../lib/connection-utils';
+import type KilovoltWS from '@strimertul/kilovolt-client';
 import { CustomRewardRedemptionEvent } from 'lib/twitch-types.ts';
 
 const videos = import.meta.glob('./shitposts/*', { as: 'url', eager: true });
 const longvideos = import.meta.glob('./long/*', { as: 'url', eager: true });
 
 async function run() {
-  // Connect to strimertul and OBS
+  // Connect to strimertul
   const kv = await Kilovolt();
 
   // Start subscription for twitch events
@@ -20,11 +21,15 @@ async function run() {
       switch (redeem.event.reward.id) {
         case '66ce0b06-1f39-4742-81c2-962dbf98fb06': // Shitpost time
           //TODO queue them up!
-          playShitpost(redeem.event.user_name);
+          playRandomShitpost(kv, redeem.event.user_name);
           break;
       }
     }
   );
+
+  kv.subscribeKey('overlay/@play-shitpost', (newVal) => {
+    playShitpost(VideoCause.Replay, 'INSTANT REPLAY', newVal);
+  });
 }
 
 //let obs: OBSWebSocket = null;
@@ -38,9 +43,10 @@ player.addEventListener('ended', () => {
   videoEl.classList.remove('show');
   //if (obs) obs.send('SetMute', { source: 'BGM', mute: false });
 });
-export async function playShitpost(name: string): Promise<void> {
-  document.querySelector('.fancyname').textContent = name;
-  document.querySelector('.unfancyname').textContent = name;
+export async function playRandomShitpost(
+  kv: KilovoltWS,
+  name: string
+): Promise<void> {
   let chosenvideos = videos;
   let special = false;
   // 1% chance to roll LOOOOONG videos
@@ -52,15 +58,47 @@ export async function playShitpost(name: string): Promise<void> {
   const randomVideo = videoURLs[
     Math.trunc(Math.random() * videoURLs.length)
   ] as string;
-  player.src = randomVideo;
+
+  // This is the worst code I've written in a long while
+  const lastShitpostList = await kv.getKey('overlays/last-shitpost-list');
+  const shitpostList = [
+    ...JSON.parse(lastShitpostList || '[]'),
+    randomVideo,
+  ].slice(-10);
+
+  await kv.putKeys({
+    'overlays/last-shitpost': randomVideo,
+    'overlays/last-shitpost-list': JSON.stringify(shitpostList),
+  });
+
+  playShitpost(VideoCause.Redeem, name, randomVideo, special);
+}
+
+enum VideoCause {
+  Redeem,
+  Replay,
+}
+
+export async function playShitpost(
+  cause: VideoCause,
+  name: string,
+  video: string,
+  lucky: boolean = false
+) {
+  document.querySelector('.fancyname').textContent = name;
+  document.querySelector('.unfancyname').textContent = name;
+  player.src = video;
+
   document.querySelectorAll('.ytbox').forEach((yt) => {
-    yt.classList.remove('fadeout');
+    yt.classList.remove('fadeout', 'special', 'replay');
     yt.classList.add('fadein');
-    if (special) {
+    if (cause == VideoCause.Replay) {
+      yt.classList.add('replay');
+      document.querySelector('.redeem-tx').innerHTML = '';
+    } else if (lucky) {
       yt.classList.add('special');
       document.querySelector('.redeem-tx').innerHTML = 'LUCKY!!! ';
     } else {
-      yt.classList.remove('special');
       document.querySelector('.redeem-tx').innerHTML = 'Thanks ';
     }
   });

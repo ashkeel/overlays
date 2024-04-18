@@ -13,6 +13,7 @@ module.exports = {
         spinthewheel: resolve(__dirname, 'spinthewheel.html'),
         skinnychat: resolve(__dirname, 'skinnychat.html'),
         shitpost: resolve(__dirname, 'shitpost.html'),
+        shitpostpanel: resolve(__dirname, 'shitpost-panel.html'),
         //music: resolve(__dirname, 'music.html'),
         dashboard: resolve(__dirname, 'dashboard.html'),
         micstatus: resolve(__dirname, 'micstatus.html'),

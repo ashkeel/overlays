@@ -126,7 +126,7 @@
         min-width: 300px;
       }
       .ytbox.special {
-        height: 500px;
+        max-height: 500px;
         background: conic-gradient(
           rgba(255, 0, 0, 1) 0%,
           rgba(255, 154, 0, 1) 10%,
@@ -142,7 +142,28 @@
         );
       }
       .ytbox.special #videoplayer {
-        height: 500px;
+        max-height: 500px;
+      }
+      .ytbox.replay {
+        top: 100px;
+      }
+      .ytbox.replay .infotext {
+        font-family: 'Marola', Times, serif;
+        font-size: 50pt;
+        text-shadow: 4px 4px 1px hsl(14, 0%, 15%);
+        top: -60px;
+      }
+      .ytbox.replay .fancyname {
+        background-image: linear-gradient(
+          269deg,
+          hsl(0, 100%, 67%),
+          hsl(60, 100%, 67%),
+          hsl(120, 100%, 67%),
+          hsl(180, 100%, 67%),
+          hsl(120, 100%, 67%),
+          hsl(60, 100%, 67%),
+          hsl(0, 100%, 67%)
+        );
       }
     </style>
   </head>
