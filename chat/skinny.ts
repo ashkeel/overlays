@@ -45,10 +45,16 @@ async function run() {
   });
 
   (
-    await kv.getJSON<{ event: TwitchEventSubChatMessage }[]>(
+    await kv.getJSON<{ event: TwitchEventSubChatMessage; date: string }[]>(
       'twitch/eventsub-history/channel.chat.message'
     )
-  )?.forEach((ev) => makeChatMessage(ev.event));
+  )
+    ?.filter((ev) => {
+      const date = new Date(ev.date);
+      // Must be in the last 12 hours
+      return Date.now() - date.getTime() < 12 * 60 * 60 * 1000;
+    })
+    .forEach((ev) => makeChatMessage(ev.event));
 }
 
 run();
