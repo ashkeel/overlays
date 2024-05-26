@@ -1,7 +1,3 @@
-export {};
-
-declare global {
-  interface Window {
-    playerReady?: boolean;
-  }
+interface Window {
+  playerReady?: boolean;
 }

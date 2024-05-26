@@ -12,14 +12,14 @@ function parseURL(url: string) {
 function makeShitpostList(kv: KilovoltWS, entries: string[]) {
   const ul = document.querySelector<HTMLUListElement>('#shitpost-list');
   ul.innerHTML = '';
-  entries.forEach((url) => {
+  for (const url of entries) {
     const li = document.createElement('li');
     li.textContent = parseURL(url);
     li.addEventListener('click', async () => {
       await kv.putKey('overlay/@play-shitpost', url);
     });
     ul.appendChild(li);
-  });
+  }
 }
 
 async function run() {
@@ -41,20 +41,20 @@ async function run() {
     });
 
   const select = document.querySelector<HTMLSelectElement>('#replay-select');
-  Object.values(videos).forEach((url) => {
+  for (const url of Object.values(videos)) {
     const opt = document.createElement('option');
     opt.value = url;
     opt.textContent = parseURL(url);
     select.appendChild(opt);
-  });
+  }
   // Add divider
   select.appendChild(document.createElement('hr'));
-  Object.values(longvideos).forEach((url) => {
+  for (const url of Object.values(longvideos)) {
     const opt = document.createElement('option');
     opt.value = url;
     opt.textContent = parseURL(url);
     select.appendChild(opt);
-  });
+  }
 
   document
     .querySelector<HTMLButtonElement>('#replay-selected')

@@ -1,4 +1,5 @@
 // https://stackoverflow.com/a/2947012
+// biome-ignore lint/suspicious/noExplicitAny: I fixed this in another place I can't be arsed to fix it here
 export type DOMParam = string | Record<string, any> | [string, ...DOMParam[]];
 
 export function makeDOM(...desc: [string, ...DOMParam[]]): HTMLElement {
@@ -13,16 +14,16 @@ export function makeDOM(...desc: [string, ...DOMParam[]]): HTMLElement {
     attributes !== null &&
     !Array.isArray(attributes)
   ) {
-    Object.keys(attributes).forEach((attr) => {
+    for (const attr in attributes) {
       if (attr.startsWith('@')) {
-        el.addEventListener(attr.substr(1), attributes[attr]);
+        el.addEventListener(attr.substring(1), attributes[attr]);
       } else {
         if (attr.startsWith('data-')) {
           el.dataset[attr.substring(5)] = attributes[attr];
         }
         el[attr] = attributes[attr];
       }
-    });
+    }
     start = 2;
   }
 

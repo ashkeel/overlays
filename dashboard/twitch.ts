@@ -22,7 +22,7 @@ export function initTwitch() {
 async function connectKV() {
   const server = await Kilovolt();
   setRow(stulName, 'OK', { backgroundColor: ok });
-  const updateStatus = function (newValue) {
+  const updateStatus = (newValue) => {
     const val = JSON.parse(newValue) as {
       id: string;
       user_name: string;
@@ -61,7 +61,7 @@ async function connectKV() {
         setRow(stulName, 'Offline', { backgroundColor: reallybad });
         break;
       default:
-        console.log('unknown status ' + event.data);
+        console.log(`unknown status ${event.data}`);
     }
   });
 }
@@ -83,7 +83,7 @@ async function checkPreroll() {
     setRow(twitchName, 'Not live', { backgroundColor: bad });
     return;
   }
-  console.log('Checking for ' + username);
+  console.log(`Checking for ${username}`);
   // Check preroll time
   try {
     const res = await fetch('https://gql.twitch.tv/gql', {
@@ -91,16 +91,13 @@ async function checkPreroll() {
         'Client-Id': import.meta.env.VITE_TWITCH_TOKEN,
         'Content-Type': 'application/json',
       },
-      body:
-        '{"query":"query { user(login: \\"' +
-        username +
-        '\\") {prerollFreeTimeSeconds}}"}',
+      body: `{"query":"query { user(login: \\"${username}\\") {prerollFreeTimeSeconds}}"}`,
       method: 'POST',
       mode: 'cors',
     });
     if (!res.ok) {
       const err = (await res.json()).message ?? res.statusText;
-      setRow(preroll, 'ERROR: ' + err, { backgroundColor: reallybad });
+      setRow(preroll, `ERROR: ${err}`, { backgroundColor: reallybad });
       return;
     }
     const data = (await res.json()) as PrerollData;

@@ -97,11 +97,11 @@ export async function spin(
   const itemID = Math.trunc(Math.random() * picks.length);
   let lastRotation = 0;
   let tickLoop = true;
-  const ticker = function () {
+  const ticker = () => {
     if (tickLoop) requestAnimationFrame(ticker);
     const rot = rotationBase.style.transform.match(/rotateX\((.*)deg/);
     if (rot) {
-      const rotation = parseFloat(rot[1]);
+      const rotation = Number.parseFloat(rot[1]);
       if (rotation - lastRotation >= angle) {
         lastRotation = rotation;
         animate({

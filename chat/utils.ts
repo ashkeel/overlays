@@ -4,7 +4,8 @@ function hslToRgb(h: number, s: number, l: number) {
     return [grey, grey, grey];
   }
 
-  function hue2rgb(p: number, q: number, t: number) {
+  function hue2rgb(p: number, q: number, tI: number) {
+    let t = tI;
     if (t < 0) t += 1;
     if (t > 1) t -= 1;
     if (t < 1 / 6) return p + (q - p) * 6 * t;
@@ -25,7 +26,7 @@ export function colorNick(nick: string) {
   const ordVal = (sum + 300) % 256;
   const lumC = (sum + 631) % 100;
   const cVals = hslToRgb(ordVal / 256, 0.9, 0.2 + lumC / 500);
-  return (
-    `#` + cVals.map((x) => Math.floor(x).toString(16).padStart(2, '0')).join('')
-  );
+  return `#${cVals
+    .map((x) => Math.floor(x).toString(16).padStart(2, '0'))
+    .join('')}`;
 }

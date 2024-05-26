@@ -38,7 +38,7 @@ export interface PushItem {
   state: string;
   stream: {
     name: string;
-    trackIds: any[];
+    trackIds: unknown[];
     variantNames: string[];
   };
   streamKey: string;

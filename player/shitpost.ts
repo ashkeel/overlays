@@ -1,10 +1,8 @@
-/* eslint-disable import/no-unresolved */
-/* eslint-disable default-case */
 import '../lib/sentry';
 
 import { Kilovolt } from '../lib/connection-utils';
 import type KilovoltWS from '@strimertul/kilovolt-client';
-import { CustomRewardRedemptionEvent } from 'lib/twitch-types.ts';
+import type { CustomRewardRedemptionEvent } from 'lib/twitch-types.ts';
 
 const videos = import.meta.glob('./shitposts/*', { as: 'url', eager: true });
 const longvideos = import.meta.glob('./long/*', { as: 'url', eager: true });
@@ -37,6 +35,7 @@ async function run() {
 const videoEl = document.querySelector('#player');
 const player = document.querySelector<HTMLVideoElement>('#videoplayer');
 player.addEventListener('ended', () => {
+  // biome-ignore lint/complexity/noForEach: NodeList
   document
     .querySelectorAll('.ytbox')
     .forEach((yt) => yt.classList.replace('fadein', 'fadeout'));
@@ -60,6 +59,7 @@ export async function playRandomShitpost(
   ] as string;
 
   // This is the worst code I've written in a long while
+  // Update: Not anymore!!
   const lastShitpostList = await kv.getKey('overlays/last-shitpost-list');
   const shitpostList = [
     ...JSON.parse(lastShitpostList || '[]'),
@@ -75,24 +75,25 @@ export async function playRandomShitpost(
 }
 
 enum VideoCause {
-  Redeem,
-  Replay,
+  Redeem = 'redeem',
+  Replay = 'replay',
 }
 
 export async function playShitpost(
   cause: VideoCause,
   name: string,
   video: string,
-  lucky: boolean = false
+  lucky = false
 ) {
   document.querySelector('.fancyname').textContent = name;
   document.querySelector('.unfancyname').textContent = name;
   player.src = video;
 
+  // biome-ignore lint/complexity/noForEach: NodeList
   document.querySelectorAll('.ytbox').forEach((yt) => {
     yt.classList.remove('fadeout', 'special', 'replay');
     yt.classList.add('fadein');
-    if (cause == VideoCause.Replay) {
+    if (cause === VideoCause.Replay) {
       yt.classList.add('replay');
       document.querySelector('.redeem-tx').innerHTML = '';
     } else if (lucky) {
@@ -103,7 +104,6 @@ export async function playShitpost(
     }
   });
   videoEl.classList.add('show');
-  //if (obs) obs.send('SetMute', { source: 'BGM', mute: true });
   player.play();
 }
 

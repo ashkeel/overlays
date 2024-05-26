@@ -1,17 +1,15 @@
-/* eslint-disable import/no-unresolved */
-/* eslint-disable default-case */
 import '../lib/sentry';
 
-import {
+import type {
   CheerEvent,
   EventSubEvent,
   RaidEvent,
   ResubscriptionEvent,
   SubscriptionEvent,
 } from '../lib/twitch-types';
+import type { AlertData, SubAlert } from './types';
 
 import { Kilovolt } from '../lib/connection-utils';
-import { AlertData, SubAlert } from './types';
 import { subAnim, cheerAnim, raidAnim } from './animations';
 
 const alertQueue: AlertData[] = [];

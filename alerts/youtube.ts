@@ -1,16 +1,11 @@
-import { OBS } from '../lib/connection-utils';
 import { createPlayer } from '../lib/player';
-import { ShitpostRedeem } from './types';
-import OBSWebSocket from 'obs-websocket-js';
+import type { ShitpostRedeem } from './types';
 
 let ytplayer: YT.Player;
-
-let obs: OBSWebSocket = null;
 
 export function killPlayer() {
   ytplayer.destroy();
   ytplayer = null;
-  if (obs) obs.send('SetMute', { source: 'BGM', mute: false });
 }
 
 export async function playShitpost(alert: ShitpostRedeem): Promise<void> {
@@ -27,7 +22,7 @@ export async function playShitpost(alert: ShitpostRedeem): Promise<void> {
       console.log(ev);
       if (ev.data === YT.PlayerState.PLAYING) {
         started = true;
-        if (obs) obs.send('SetMute', { source: 'BGM', mute: true });
+        // biome-ignore lint/complexity/noForEach: NodeList
         document.querySelectorAll('.ytbox').forEach((yt) => {
           yt.classList.remove('fadeout');
           yt.classList.add('fadein');
@@ -39,6 +34,7 @@ export async function playShitpost(alert: ShitpostRedeem): Promise<void> {
         (started && ev.data === YT.PlayerState.UNSTARTED) ||
         ev.data === YT.PlayerState.ENDED
       ) {
+        // biome-ignore lint/complexity/noForEach: NodeList
         document
           .querySelectorAll('.ytbox')
           .forEach((yt) => yt.classList.replace('fadein', 'fadeout'));
@@ -48,13 +44,4 @@ export async function playShitpost(alert: ShitpostRedeem): Promise<void> {
       }
     },
   });
-}
-
-export async function initOBS() {
-  // Connect to OBS
-  try {
-    obs = await OBS();
-  } catch (e) {
-    console.warn('OBS not found, disabling OBS integration');
-  }
 }

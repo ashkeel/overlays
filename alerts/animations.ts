@@ -5,7 +5,7 @@ import { $el } from '../lib/domutils';
 import followWoosh from '../assets/sounds/follow-woosh.wav';
 
 import { animate } from './sync';
-import { FollowAlert, SubAlert, RaidAlert, CheerAlert } from './types';
+import type { SubAlert, RaidAlert, CheerAlert } from './types';
 import { delay } from '../lib/sync';
 
 const followSprite = new Howl({ src: [followWoosh] });
@@ -33,7 +33,7 @@ function animScript(text: string): HTMLElement {
 export async function subAnim(alertData: SubAlert) {
   let div: HTMLElement = null;
   if (alertData.total) {
-    div = animScript(`Resub `);
+    div = animScript('Resub ');
     const months = animScript(`${alertData.total} months`);
     while (months.firstElementChild) {
       months.firstElementChild.className = 'letter smol';
@@ -93,7 +93,7 @@ export async function subAnim(alertData: SubAlert) {
 }
 
 export async function raidAnim(alertData: RaidAlert) {
-  const div = animScript(`Raid `);
+  const div = animScript('Raid ');
   const months = animScript(`${alertData.viewers} viewers`);
   while (months.firstElementChild) {
     months.firstElementChild.className = 'letter smol';
@@ -150,7 +150,7 @@ export async function raidAnim(alertData: RaidAlert) {
 }
 
 export async function cheerAnim(alertData: CheerAlert) {
-  const div = animScript(`Cheer `);
+  const div = animScript('Cheer ');
   const months = animScript(`${alertData.amount} bits`);
   while (months.firstElementChild) {
     months.firstElementChild.className = 'letter smol';

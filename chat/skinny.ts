@@ -1,7 +1,7 @@
 import '../lib/sentry';
 import { Howl } from 'howler';
 import { Kilovolt } from '../lib/connection-utils';
-import { TwitchEventSubChatMessage, renderTwitchMessage } from './twitch';
+import { type TwitchEventSubChatMessage, renderTwitchMessage } from './twitch';
 import { $el } from '../lib/domutils';
 
 import chatSound from '../assets/sounds/chat-pop.wav';
@@ -44,17 +44,21 @@ async function run() {
     chatSprite.play();
   });
 
-  (
+  const history = (
     await kv.getJSON<{ event: TwitchEventSubChatMessage; date: string }[]>(
       'twitch/eventsub-history/channel.chat.message'
     )
-  )
-    ?.filter((ev) => {
-      const date = new Date(ev.date);
-      // Must be in the last 12 hours
-      return Date.now() - date.getTime() < 12 * 60 * 60 * 1000;
-    })
-    .forEach((ev) => makeChatMessage(ev.event));
+  )?.filter((ev) => {
+    const date = new Date(ev.date);
+    // Must be in the last 12 hours
+    return Date.now() - date.getTime() < 12 * 60 * 60 * 1000;
+  });
+
+  if (history) {
+    for (const ev of history) {
+      makeChatMessage(ev.event);
+    }
+  }
 }
 
 run();

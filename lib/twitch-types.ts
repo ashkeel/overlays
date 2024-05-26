@@ -1,5 +1,3 @@
-/* eslint-disable camelcase */
-
 export interface ChannelUpdateEvent {
   subscription: {
     type: 'channel.update';

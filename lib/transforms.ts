@@ -1,5 +1,6 @@
 function toLetters(el: HTMLElement) {
   // Wrap all letters in a span
+  // biome-ignore lint/complexity/noForEach: NodeList
   el.childNodes.forEach((child) => {
     child.textContent
       .trim()

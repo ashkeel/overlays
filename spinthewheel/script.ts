@@ -1,5 +1,5 @@
 import {
-  CustomRewardRedemptionEvent,
+  type CustomRewardRedemptionEvent,
   Strimertul,
 } from '@strimertul/strimertul';
 import { Kilovolt as KV } from '../lib/connection-utils';

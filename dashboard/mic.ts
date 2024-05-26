@@ -1,4 +1,4 @@
-import XLRWebSocket, { Patch } from '../lib/xlr';
+import XLRWebSocket, { type Patch } from '../lib/xlr';
 
 const statusEl = document.getElementById('status');
 function setMuted(muted: boolean) {
@@ -22,11 +22,11 @@ async function run() {
   setMuted(muted);
 
   xlr.on('patch', (change: CustomEvent<Patch>) => {
-    change.detail.Patch.forEach((patch) => {
-      if (patch.path == `/mixers/${mixer_name}/fader_status/A/mute_state`) {
+    for (const patch of change.detail.Patch) {
+      if (patch.path === `/mixers/${mixer_name}/fader_status/A/mute_state`) {
         setMuted(patch.value !== 'Unmuted');
       }
-    });
+    }
   });
 }
 run();

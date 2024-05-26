@@ -23,14 +23,13 @@ export interface PlayerOptions {
 
 export async function createPlayer(
   playlistID: string,
-  options: PlayerOptions = {},
+  options: PlayerOptions = {}
 ): Promise<YT.Player> {
   await waitForPlayer();
   return new Promise((resolve) => {
     // Check if it's a video or playlist
     const isPlaylist = playlistID.length > 30;
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const playerclass = new YT.Player('player', {
       height: options.height || '400',
       width: options.width || '720',
@@ -41,10 +40,10 @@ export async function createPlayer(
             player.setVolume(100);
             if (isPlaylist) {
               player.setShuffle(
-                typeof options.shuffle !== 'undefined' ? options.shuffle : true,
+                typeof options.shuffle !== 'undefined' ? options.shuffle : true
               );
               player.setLoop(
-                typeof options.loop !== 'undefined' ? options.loop : true,
+                typeof options.loop !== 'undefined' ? options.loop : true
               );
               player.playVideoAt(0);
             } else {

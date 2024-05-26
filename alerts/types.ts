@@ -1,4 +1,4 @@
-import { SubscriptionMessage } from '../lib/twitch-types';
+import type { SubscriptionMessage } from '../lib/twitch-types';
 
 export interface FollowAlert {
   type: 'follow';

@@ -1,7 +1,7 @@
-const { resolve } = require('path');
+const { resolve } = require('node:path');
 
 module.exports = {
-  base: `http://localhost:4337/static/`,
+  base: "http://localhost:4337/static/",
   build: {
     target: 'chrome95',
     rollupOptions: {

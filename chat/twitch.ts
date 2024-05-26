@@ -3,8 +3,8 @@ export function emoteURL(id: string): string {
 }
 
 export function renderTwitchMessage(data: TwitchEventSubChatMessage) {
-  let message = [];
-  for (let fragment of data.message.fragments) {
+  const message = [];
+  for (const fragment of data.message.fragments) {
     switch (fragment.type) {
       case 'mention':
       case 'text':
