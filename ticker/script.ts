@@ -1,3 +1,3 @@
-import '../lib/transforms';
+import "../lib/transforms";
 
-import './timer';
+import "./timer";

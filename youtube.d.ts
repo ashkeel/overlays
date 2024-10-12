@@ -1,3 +1,3 @@
 interface Window {
-  playerReady?: boolean;
+	playerReady?: boolean;
 }

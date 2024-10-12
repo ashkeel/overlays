@@ -9,5 +9,5 @@ Public release of overlays used in [twitch.tv/ashkeelvt](https://www.twitch.tv/a
 
 ## License
 
-All code is licensed under ISC, see `LICENSE` for more info.
+All code is licensed under AGPL-3.0-only, see `LICENSE` for more info.
 All assets in `assets/` belong to their respective owners and are not licensed under any license!

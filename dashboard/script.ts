@@ -1,9 +1,9 @@
-import { initNebulaStream } from './nebula';
-import { initTwitch } from './twitch';
+import { initNebulaStream } from "./nebula";
+import { initTwitch } from "./twitch";
 
 async function run() {
-  initTwitch();
-  initNebulaStream();
+	initTwitch();
+	initNebulaStream();
 }
 
 run();

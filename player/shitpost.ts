@@ -1,110 +1,119 @@
-import '../lib/sentry';
+import "../lib/sentry";
 
-import { Kilovolt } from '../lib/connection-utils';
-import type KilovoltWS from '@strimertul/kilovolt-client';
-import type { CustomRewardRedemptionEvent } from 'lib/twitch-types.ts';
+import { Kilovolt } from "../lib/connection-utils";
+import type KilovoltWS from "@strimertul/kilovolt-client";
+import type { CustomRewardRedemptionEvent } from "lib/twitch-types.ts";
 
-const videos = import.meta.glob('./shitposts/*', { as: 'url', eager: true });
-const longvideos = import.meta.glob('./long/*', { as: 'url', eager: true });
+const videos = import.meta.glob("./shitposts/*", { as: "url", eager: true });
+const longvideos = import.meta.glob("./long/*", { as: "url", eager: true });
 
 async function run() {
-  // Connect to strimertul
-  const kv = await Kilovolt();
+	// Connect to strimertul
+	const kv = await Kilovolt();
 
-  // Start subscription for twitch events
-  kv.subscribeKey(
-    'twitch/ev/eventsub-event/channel.channel_points_custom_reward_redemption.add',
-    (newVal) => {
-      const redeem = JSON.parse(newVal) as CustomRewardRedemptionEvent;
-      switch (redeem.event.reward.id) {
-        case '66ce0b06-1f39-4742-81c2-962dbf98fb06': // Shitpost time
-          //TODO queue them up!
-          playRandomShitpost(kv, redeem.event.user_name);
-          break;
-      }
-    }
-  );
+	// Start subscription for twitch events
+	kv.subscribeKey(
+		"twitch/ev/eventsub-event/channel.channel_points_custom_reward_redemption.add",
+		(newVal) => {
+			const redeem = JSON.parse(newVal) as CustomRewardRedemptionEvent;
+			switch (redeem.event.reward.id) {
+				case "66ce0b06-1f39-4742-81c2-962dbf98fb06": // Shitpost time
+					//TODO queue them up!
+					playRandomShitpost(kv, redeem.event.user_name);
+					break;
+			}
+		},
+	);
 
-  kv.subscribeKey('overlay/@play-shitpost', (newVal) => {
-    playShitpost(VideoCause.Replay, 'INSTANT REPLAY', newVal);
-  });
+	kv.subscribeKey("overlay/@play-shitpost", (newVal) => {
+		playShitpost(VideoCause.Replay, "INSTANT REPLAY", newVal);
+	});
 }
 
 //let obs: OBSWebSocket = null;
 
-const videoEl = document.querySelector('#player');
-const player = document.querySelector<HTMLVideoElement>('#videoplayer');
-player.addEventListener('ended', () => {
-  // biome-ignore lint/complexity/noForEach: NodeList
-  document
-    .querySelectorAll('.ytbox')
-    .forEach((yt) => yt.classList.replace('fadein', 'fadeout'));
-  videoEl.classList.remove('show');
-  //if (obs) obs.send('SetMute', { source: 'BGM', mute: false });
+const videoEl = document.querySelector("#player");
+const player = document.querySelector<HTMLVideoElement>("#videoplayer");
+player.addEventListener("ended", () => {
+	// biome-ignore lint/complexity/noForEach: NodeList
+	document
+		.querySelectorAll(".ytbox")
+		.forEach((yt) => yt.classList.replace("fadein", "fadeout"));
+	videoEl.classList.remove("show");
+	//if (obs) obs.send('SetMute', { source: 'BGM', mute: false });
 });
 export async function playRandomShitpost(
-  kv: KilovoltWS,
-  name: string
+	kv: KilovoltWS,
+	name: string,
 ): Promise<void> {
-  let chosenvideos = videos;
-  let special = false;
-  // 1% chance to roll LOOOOONG videos
-  if (Math.random() < 0.01) {
-    chosenvideos = longvideos;
-    special = true;
-  }
-  const videoURLs = Object.values(chosenvideos);
-  const randomVideo = videoURLs[
-    Math.trunc(Math.random() * videoURLs.length)
-  ] as string;
+	let chosenvideos = videos;
+	let special = false;
+	// 1% chance to roll LOOOOONG videos
+	if (Math.random() < 0.01) {
+		chosenvideos = longvideos;
+		special = true;
+	}
+	const videoURLs = Object.values(chosenvideos);
+	const randomVideo = videoURLs[
+		Math.trunc(Math.random() * videoURLs.length)
+	] as string;
 
-  // This is the worst code I've written in a long while
-  // Update: Not anymore!!
-  const lastShitpostList = await kv.getKey('overlays/last-shitpost-list');
-  const shitpostList = [
-    ...JSON.parse(lastShitpostList || '[]'),
-    randomVideo,
-  ].slice(-10);
+	// This is the worst code I've written in a long while
+	// Update: Not anymore!!
+	const lastShitpostList = await kv.getKey("overlays/last-shitpost-list");
+	const shitpostList = [
+		...JSON.parse(lastShitpostList || "[]"),
+		randomVideo,
+	].slice(-10);
 
-  await kv.putKeys({
-    'overlays/last-shitpost': randomVideo,
-    'overlays/last-shitpost-list': JSON.stringify(shitpostList),
-  });
+	await kv.putKeys({
+		"overlays/last-shitpost": randomVideo,
+		"overlays/last-shitpost-list": JSON.stringify(shitpostList),
+	});
 
-  playShitpost(VideoCause.Redeem, name, randomVideo, special);
+	if (special) {
+		// Save that viewer got lucky!
+		const leaderboard: Record<string, number> = await kv.getJSON(
+			"overlays/lucky-leaderboard",
+		);
+		leaderboard[name] = (leaderboard[name] || 0) + 1;
+		await kv.putJSON("overlays/lucky-leaderboard", leaderboard);
+	}
+
+	playShitpost(VideoCause.Redeem, name, randomVideo, special);
 }
 
 enum VideoCause {
-  Redeem = 'redeem',
-  Replay = 'replay',
+	Redeem = "redeem",
+	Replay = "replay",
 }
 
 export async function playShitpost(
-  cause: VideoCause,
-  name: string,
-  video: string,
-  lucky = false
+	cause: VideoCause,
+	name: string,
+	video: string,
+	lucky = false,
 ) {
-  document.querySelector('.fancyname').textContent = name;
-  document.querySelector('.unfancyname').textContent = name;
-  player.src = video;
+	document.querySelector(".fancyname").textContent = name;
+	document.querySelector(".unfancyname").textContent = name;
+	player.src = video;
 
-  // biome-ignore lint/complexity/noForEach: NodeList
-  document.querySelectorAll('.ytbox').forEach((yt) => {
-    yt.classList.remove('fadeout', 'special', 'replay');
-    yt.classList.add('fadein');
-    if (cause === VideoCause.Replay) {
-      yt.classList.add('replay');
-      document.querySelector('.redeem-tx').innerHTML = '';
-    } else if (lucky) {
-      yt.classList.add('special');
-      document.querySelector('.redeem-tx').innerHTML = 'LUCKY!!! ';
-    } else {
-      document.querySelector('.redeem-tx').innerHTML = 'Thanks ';
-    }
-  });
-  videoEl.classList.add('show');
-  player.play();
+	// biome-ignore lint/complexity/noForEach: NodeList
+	document.querySelectorAll(".ytbox").forEach((yt) => {
+		yt.classList.remove("fadeout", "special", "replay");
+		yt.classList.add("fadein");
+		if (cause === VideoCause.Replay) {
+			yt.classList.add("replay");
+			document.querySelector(".redeem-tx").innerHTML = "";
+		} else if (lucky) {
+			yt.classList.add("special");
+			document.querySelector(".redeem-tx").innerHTML = "LUCKY!!! ";
+		} else {
+			document.querySelector(".redeem-tx").innerHTML = "Thanks ";
+		}
+	});
+	videoEl.classList.add("show");
+	player.play();
 }
 
 run();

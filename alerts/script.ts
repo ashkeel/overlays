@@ -1,43 +1,43 @@
-import '../lib/sentry';
+import "../lib/sentry";
 
 import type {
-  CheerEvent,
-  EventSubEvent,
-  RaidEvent,
-  ResubscriptionEvent,
-  SubscriptionEvent,
-} from '../lib/twitch-types';
-import type { AlertData, SubAlert } from './types';
+	CheerEvent,
+	EventSubEvent,
+	RaidEvent,
+	ResubscriptionEvent,
+	SubscriptionEvent,
+} from "../lib/twitch-types";
+import type { AlertData, SubAlert } from "./types";
 
-import { Kilovolt } from '../lib/connection-utils';
-import { subAnim, cheerAnim, raidAnim } from './animations';
+import { Kilovolt } from "../lib/connection-utils";
+import { subAnim, cheerAnim, raidAnim } from "./animations";
 
 const alertQueue: AlertData[] = [];
 let isPlaying = false;
 
 async function playAlert(alertData: AlertData) {
-  isPlaying = true;
-  switch (alertData.type) {
-    case 'sub':
-      await subAnim(alertData);
-      break;
-    case 'cheer':
-      await cheerAnim(alertData);
-      break;
-    case 'raid':
-      await raidAnim(alertData);
-      break;
-    default:
-    // TODO
-  }
-  isPlaying = false;
+	isPlaying = true;
+	switch (alertData.type) {
+		case "sub":
+			await subAnim(alertData);
+			break;
+		case "cheer":
+			await cheerAnim(alertData);
+			break;
+		case "raid":
+			await raidAnim(alertData);
+			break;
+		default:
+		// TODO
+	}
+	isPlaying = false;
 }
 
 // TODO Please just do better
 setInterval(async () => {
-  if (alertQueue.length > 0 && !isPlaying) {
-    await playAlert(alertQueue.shift());
-  }
+	if (alertQueue.length > 0 && !isPlaying) {
+		await playAlert(alertQueue.shift());
+	}
 }, 1000);
 
 /*
@@ -48,79 +48,79 @@ setInterval(async () => {
  */
 const impendingSubs: Record<string, SubAlert[]> = {};
 function deduplicateSubs(name: string) {
-  // Deduplicate subs
-  const dedup = impendingSubs[name].filter((sub, i, self) => {
-    const streak = 'total' in sub ? sub.total : 1;
-    const maxStreak = self.reduce(
-      (acc, cur) => Math.max(acc, 'total' in cur ? cur.total : 1),
-      0
-    );
-    return streak >= maxStreak;
-  });
-  impendingSubs[name] = [];
-  alertQueue.push(...dedup);
+	// Deduplicate subs
+	const dedup = impendingSubs[name].filter((sub, i, self) => {
+		const streak = "total" in sub ? sub.total : 1;
+		const maxStreak = self.reduce(
+			(acc, cur) => Math.max(acc, "total" in cur ? cur.total : 1),
+			0,
+		);
+		return streak >= maxStreak;
+	});
+	impendingSubs[name] = [];
+	alertQueue.push(...dedup);
 }
 
 async function run() {
-  // Connect to strimertul and OBS
-  const server = await Kilovolt();
+	// Connect to strimertul and OBS
+	const server = await Kilovolt();
 
-  // Start subscription for twitch events
-  server.subscribePrefix('twitch/ev/eventsub-event/', async (newValue) => {
-    const ev = JSON.parse(newValue) as EventSubEvent;
-    switch (ev.subscription.type) {
-      case 'channel.subscribe': {
-        const sub = ev as SubscriptionEvent;
-        if (!(sub.event.user_name in impendingSubs)) {
-          impendingSubs[sub.event.user_name] = [];
-        }
-        impendingSubs[sub.event.user_name].push({
-          type: 'sub',
-          user: sub.event.user_name,
-          gift: sub.event.is_gift,
-          tier: sub.event.tier,
-        });
-        setTimeout(deduplicateSubs.bind(this, sub.event.user_name), 5000);
-        break;
-      }
-      case 'channel.subscription.message': {
-        const sub = ev as ResubscriptionEvent;
-        if (!(sub.event.user_name in impendingSubs)) {
-          impendingSubs[sub.event.user_name] = [];
-        }
-        impendingSubs[sub.event.user_name].push({
-          type: 'sub',
-          user: sub.event.user_name,
-          gift: false,
-          tier: sub.event.tier,
-          message: sub.event.message,
-          total: sub.event.cumulative_months,
-          streak: sub.event.streak_months,
-        });
-        setTimeout(deduplicateSubs.bind(this, sub.event.user_name), 5000);
-        break;
-      }
-      case 'channel.cheer': {
-        const chr = ev as CheerEvent;
-        alertQueue.push({
-          type: 'cheer',
-          user: chr.event.user_name,
-          amount: chr.event.bits,
-          message: chr.event.message,
-        });
-        break;
-      }
-      case 'channel.raid': {
-        const chr = ev as RaidEvent;
-        alertQueue.push({
-          type: 'raid',
-          user: chr.event.from_broadcaster_user_name,
-          viewers: chr.event.viewers,
-        });
-        break;
-      }
-    }
-  });
+	// Start subscription for twitch events
+	server.subscribePrefix("twitch/ev/eventsub-event/", async (newValue) => {
+		const ev = JSON.parse(newValue) as EventSubEvent;
+		switch (ev.subscription.type) {
+			case "channel.subscribe": {
+				const sub = ev as SubscriptionEvent;
+				if (!(sub.event.user_name in impendingSubs)) {
+					impendingSubs[sub.event.user_name] = [];
+				}
+				impendingSubs[sub.event.user_name].push({
+					type: "sub",
+					user: sub.event.user_name,
+					gift: sub.event.is_gift,
+					tier: sub.event.tier,
+				});
+				setTimeout(deduplicateSubs.bind(this, sub.event.user_name), 5000);
+				break;
+			}
+			case "channel.subscription.message": {
+				const sub = ev as ResubscriptionEvent;
+				if (!(sub.event.user_name in impendingSubs)) {
+					impendingSubs[sub.event.user_name] = [];
+				}
+				impendingSubs[sub.event.user_name].push({
+					type: "sub",
+					user: sub.event.user_name,
+					gift: false,
+					tier: sub.event.tier,
+					message: sub.event.message,
+					total: sub.event.cumulative_months,
+					streak: sub.event.streak_months,
+				});
+				setTimeout(deduplicateSubs.bind(this, sub.event.user_name), 5000);
+				break;
+			}
+			case "channel.cheer": {
+				const chr = ev as CheerEvent;
+				alertQueue.push({
+					type: "cheer",
+					user: chr.event.user_name,
+					amount: chr.event.bits,
+					message: chr.event.message,
+				});
+				break;
+			}
+			case "channel.raid": {
+				const chr = ev as RaidEvent;
+				alertQueue.push({
+					type: "raid",
+					user: chr.event.from_broadcaster_user_name,
+					viewers: chr.event.viewers,
+				});
+				break;
+			}
+		}
+	});
 }
 
 run();

@@ -1,43 +1,75 @@
-// https://stackoverflow.com/a/2947012
-// biome-ignore lint/suspicious/noExplicitAny: I fixed this in another place I can't be arsed to fix it here
-export type DOMParam = string | Record<string, any> | [string, ...DOMParam[]];
+// Inspired by `make` by Matthew Crumley (silentmatt.com) https://stackoverflow.com/a/2947012
+// Licensed under AGPL-3.0, check `LICENSE` for the full text.
 
-export function makeDOM(...desc: [string, ...DOMParam[]]): HTMLElement {
-  const name = desc[0];
-  const attributes = desc[1];
+type ElementProperties<T extends keyof HTMLElementTagNameMap> = {
+	[key in keyof HTMLElementTagNameMap[T]]:
+		| HTMLElementTagNameMap[T][key]
+		| string;
+} & {
+	[key in keyof HTMLElementEventMap as `@${key}`]: (
+		this: HTMLElement,
+		ev: HTMLElementEventMap[key],
+	) => void;
+};
 
-  const el = document.createElement(name);
+type DOMElem = Node | string;
 
-  let start = 1;
-  if (
-    typeof attributes === 'object' &&
-    attributes !== null &&
-    !Array.isArray(attributes)
-  ) {
-    for (const attr in attributes) {
-      if (attr.startsWith('@')) {
-        el.addEventListener(attr.substring(1), attributes[attr]);
-      } else {
-        if (attr.startsWith('data-')) {
-          el.dataset[attr.substring(5)] = attributes[attr];
-        }
-        el[attr] = attributes[attr];
-      }
-    }
-    start = 2;
-  }
+type WithClassOrId<T extends keyof HTMLElementTagNameMap> =
+	| `${T}#${string}`
+	| `${T}.${string}`;
 
-  for (let i = start; i < desc.length; i += 1) {
-    if (Array.isArray(desc[i])) {
-      el.appendChild(makeDOM.apply(this, desc[i]));
-    } else if (desc[i] instanceof Node) {
-      el.appendChild(desc[i] as Node);
-    } else {
-      el.appendChild(document.createTextNode(desc[i] as string));
-    }
-  }
+export function $el<T extends keyof HTMLElementTagNameMap>(
+	name: T | WithClassOrId<T>,
+	...desc: [Partial<ElementProperties<T>>, ...DOMElem[]] | DOMElem[]
+): HTMLElementTagNameMap[T] {
+	// Take off ID or class from the name
+	let elementName = name as string;
+	let className = "";
+	let id = "";
 
-  return el;
+	if (name.includes("#")) {
+		[elementName, id] = name.split("#");
+	}
+
+	if (name.includes(".")) {
+		[elementName, className] = name.split(".");
+	}
+
+	// Create the element and add the attributes (if found)
+	const el = document.createElement(elementName as T);
+	if (className) {
+		el.className = className;
+	}
+	if (id) {
+		el.id = id;
+	}
+
+	const attributes = desc[0];
+	if (typeof attributes === "object" && !(attributes instanceof Node)) {
+		for (const attr in attributes) {
+			const value = (attributes as Record<string, unknown>)[attr];
+			if (attr.startsWith("@")) {
+				el.addEventListener(
+					attr.substring(1),
+					value as EventListenerOrEventListenerObject,
+				);
+			} else if (attr === "dataset") {
+				for (const key in value as Record<string, unknown>) {
+					el.dataset[key] = value[key];
+				}
+			} else {
+				el[attr as keyof HTMLElementTagNameMap[T]] =
+					value as HTMLElementTagNameMap[T][keyof HTMLElementTagNameMap[T]];
+			}
+		}
+		desc.shift();
+	}
+
+	for (const item of desc as DOMElem[]) {
+		el.appendChild(item instanceof Node ? item : document.createTextNode(item));
+	}
+
+	return el;
 }
 
-export const $el = makeDOM;
+export default $el;
