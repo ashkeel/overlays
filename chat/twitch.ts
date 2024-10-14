@@ -1,4 +1,4 @@
-import $el from "lib/domutils.ts";
+import $el from "../lib/domutils";
 
 export function emoteURL(id: string): string {
 	return `https://static-cdn.jtvnw.net/emoticons/v2/${id}/default/dark/1.0`;
