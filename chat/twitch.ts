@@ -1,3 +1,5 @@
+import $el from "lib/domutils.ts";
+
 export function emoteURL(id: string): string {
 	return `https://static-cdn.jtvnw.net/emoticons/v2/${id}/default/dark/1.0`;
 }
@@ -12,13 +14,12 @@ export function renderTwitchMessage(data: TwitchEventSubChatMessage) {
 				break;
 			case "emote":
 			case "cheermote":
-				message.push([
-					"img",
-					{
+				message.push(
+					$el("img", {
 						className: "emote",
 						src: emoteURL(fragment.emote.id),
-					},
-				]);
+					}),
+				);
 		}
 	}
 	return message;
