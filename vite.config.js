@@ -17,6 +17,7 @@ module.exports = {
 				//music: resolve(__dirname, 'music.html'),
 				dashboard: resolve(__dirname, "dashboard.html"),
 				micstatus: resolve(__dirname, "micstatus.html"),
+				eightsky: resolve(__dirname, "eightsky.html"),
 			},
 		},
 	},
