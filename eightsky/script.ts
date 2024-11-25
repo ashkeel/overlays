@@ -26,7 +26,7 @@ filter.addWords("project 2025", "trump", "joe", "white house", "government");
 
 const lookFor = [
 	//"maybe",
-	"for sure",
+	"inconclusive",
 	"probably yes",
 	"probably not",
 	"try again",
@@ -83,13 +83,14 @@ async function getNextReply(): Promise<string> {
 }
 
 const form = document.querySelector<HTMLFormElement>("form");
+const label = document.querySelector<HTMLSpanElement>("#label");
+const response = document.querySelector<HTMLInputElement>("#response");
 
-async function predict() {
+async function predict(): Promise<string> {
 	form.classList.remove("fadeout");
 	form.classList.add("visible");
 
 	const reply = await getNextReply();
-	console.log(reply);
 
 	const wav = await tts.predict({
 		text: reply,
@@ -103,14 +104,17 @@ async function predict() {
 
 		audio.onended = () => {
 			setTimeout(() => {
-				document.querySelector<HTMLInputElement>("#response").checked = false;
+				response.checked = false;
 				form.classList.replace("visible", "fadeout");
 			}, 1500);
 		};
 	}, 2000);
 
-	document.querySelector<HTMLSpanElement>("#label").innerHTML = reply;
-	document.querySelector<HTMLInputElement>("#response").checked = true;
+	label.innerHTML = reply;
+	form.classList.add("zoomed");
+	response.checked = true;
+
+	return reply;
 }
 
 async function run() {
@@ -130,13 +134,17 @@ async function run() {
 	// Start subscription for twitch events
 	kv.subscribeKey(
 		"twitch/ev/eventsub-event/channel.channel_points_custom_reward_redemption.add",
-		(newVal) => {
+		async (newVal) => {
 			const redeem = JSON.parse(newVal) as CustomRewardRedemptionEvent;
 			console.log(redeem);
 			switch (redeem.event.reward.id) {
-				case "7db27d86-3dbe-4301-b0ff-b8a3210e5526": // Magic 8 ball time
-					predict();
-					break;
+				case "7db27d86-3dbe-4301-b0ff-b8a3210e5526": {
+					// Magic 8 ball time
+					const message = await predict();
+					kv.putJSON("twitch/chat/@send-message", {
+						message: `Magic skyball says: ${message}`,
+					});
+				}
 			}
 		},
 	);
