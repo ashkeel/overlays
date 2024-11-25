@@ -1,7 +1,10 @@
 import { Filter } from "bad-words";
 import * as tts from "@diffusionstudio/vits-web";
+import { Howl } from "howler";
 import { Kilovolt } from "../lib/connection-utils";
 import type { CustomRewardRedemptionEvent } from "../lib/twitch-types";
+
+import neverAnswer from "../assets/sounds/never.ogg";
 
 type BskyPost =
 	| {
@@ -47,14 +50,22 @@ const lookFor = [
 ];
 
 const VOICE_NAME = "en_US-hfc_male-medium";
+const tooLateSprite = new Howl({ src: [neverAnswer], volume: 0.7 });
 
-async function getNextReply(): Promise<string> {
+let stopSeeking = false;
+
+async function getNextReply(): Promise<string | null> {
 	return new Promise((resolve) => {
 		const ws = new WebSocket(
 			"wss://jetstream2.us-west.bsky.network/subscribe?wantedCollections=app.bsky.feed.post",
 		);
 
 		ws.onmessage = (ev) => {
+			if (stopSeeking) {
+				ws.close();
+				resolve(null);
+			}
+
 			const data = JSON.parse(ev.data) as BskyPost;
 
 			if (data.kind !== "commit") return;
@@ -86,11 +97,22 @@ const form = document.querySelector<HTMLFormElement>("form");
 const label = document.querySelector<HTMLSpanElement>("#label");
 const response = document.querySelector<HTMLInputElement>("#response");
 
-async function predict(): Promise<string> {
+async function predict(): Promise<string | null> {
+	stopSeeking = false;
 	form.classList.remove("fadeout");
 	form.classList.add("visible");
 
+	const timeout = setTimeout(() => {
+		tooLateSprite.play();
+		form.classList.replace("visible", "fadeout");
+		stopSeeking = true;
+	}, 40000);
 	const reply = await getNextReply();
+	clearTimeout(timeout);
+
+	if (!reply) {
+		return null;
+	}
 
 	const wav = await tts.predict({
 		text: reply,
@@ -105,6 +127,7 @@ async function predict(): Promise<string> {
 		audio.onended = () => {
 			setTimeout(() => {
 				response.checked = false;
+				form.classList.remove("zoomed");
 				form.classList.replace("visible", "fadeout");
 			}, 1500);
 		};
@@ -141,9 +164,15 @@ async function run() {
 				case "7db27d86-3dbe-4301-b0ff-b8a3210e5526": {
 					// Magic 8 ball time
 					const message = await predict();
-					kv.putJSON("twitch/chat/@send-message", {
-						message: `Magic skyball says: ${message}`,
-					});
+					if (!message) {
+						kv.putJSON("twitch/chat/@send-message", {
+							message: `Magic skyball didn't feel like answering, try again.`,
+						});
+					} else {
+						kv.putJSON("twitch/chat/@send-message", {
+							message: `Magic skyball says: ${message}`,
+						});
+					}
 				}
 			}
 		},
