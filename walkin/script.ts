@@ -11,6 +11,7 @@ import cyg from "./sounds/cyg.ogg";
 import sonicchan from "./sounds/sonicchan.ogg";
 import catboy from "./sounds/catboy.ogg";
 import selectoption from "./sounds/select_option.wav";
+import disgaea from "./sounds/disgaea.mp3";
 
 import anime from "animejs";
 
@@ -25,6 +26,7 @@ const sounds = {
 	enfieldvt: new Howl({ src: [catboy] }),
 	sonic_chan: new Howl({ src: [sonicchan] }),
 	festivebop: new Howl({ src: [selectoption] }),
+	princejazzu: new Howl({ src: [disgaea] }),
 };
 
 let lastMessageTable: Record<string, number> = {};
