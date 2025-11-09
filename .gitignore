@@ -1,6 +1,7 @@
 node_modules
 *.local
 dist
+result
 .parcel-cache
 player/shitposts/*
 player/long/*

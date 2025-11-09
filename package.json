@@ -1,34 +1,39 @@
 {
-	"name": "overlays",
-	"version": "1.0.0",
-	"description": "",
-	"scripts": {
-		"start": "vite",
-		"build": "vite build"
-	},
-	"keywords": [],
-	"author": "",
-	"license": "AGPL-3.0-only",
-	"dependencies": {
-		"@diffusionstudio/vits-web": "^1.0.3",
-		"@sentry/browser": "^8.39.0",
-		"@strimertul/kilovolt-client": "^8.0.0",
-		"@strimertul/strimertul": "^0.1.2",
-		"@types/animejs": "^3.1.12",
-		"@types/howler": "^2.2.12",
-		"@types/node": "^22.9.1",
-		"animejs": "^3.2.2",
-		"bad-words": "^4.0.0",
-		"buffer": "^6.0.3",
-		"dotenv": "^16.4.5",
-		"events": "^3.3.0",
-		"howler": "^2.2.4",
-		"js-confetti": "^0.12.0",
-		"obs-websocket-js": "^5.0.6",
-		"typescript": "^5.6.3",
-		"vite": "^5.4.11"
-	},
-	"devDependencies": {
-		"@biomejs/biome": "^1.9.4"
-	}
+  "name": "overlays",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "vite",
+    "build": "vite build",
+    "postinstall": "bun2nix -o bun.nix"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "AGPL-3.0-only",
+  "dependencies": {
+    "@diffusionstudio/vits-web": "^1.0.3",
+    "@sentry/browser": "^8.39.0",
+    "@strimertul/kilovolt-client": "^8.0.0",
+    "@strimertul/strimertul": "^0.1.2",
+    "@types/animejs": "^3.1.12",
+    "@types/howler": "^2.2.12",
+    "@types/node": "^22.9.1",
+    "animejs": "^3.2.2",
+    "bad-words": "^4.0.0",
+    "buffer": "^6.0.3",
+    "dotenv": "^16.4.5",
+    "events": "^3.3.0",
+    "howler": "^2.2.4",
+    "js-confetti": "^0.12.0",
+    "obs-websocket-js": "^5.0.6",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4"
+  },
+  "trustedDependencies": [
+    "@biomejs/biome",
+    "protobufjs"
+  ]
 }
