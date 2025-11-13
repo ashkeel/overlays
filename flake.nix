@@ -32,8 +32,17 @@
       {
         devShell = pkgs.mkShell {
           # Shell environment setup for development
-          buildInputs = with pkgs; [
+          nativeBuildInputs = with pkgs; [
+            # Runner/Builder
             bun
+            # LSP
+            vscode-langservers-extracted
+            typescript-language-server
+            superhtml
+            # Sanity
+            tmux
+          ];
+          buildInputs = [
             bun2nix.packages.${system}.default
           ];
         };
