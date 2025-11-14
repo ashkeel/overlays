@@ -18,6 +18,7 @@ module.exports = {
 				dashboard: resolve(__dirname, "dashboard.html"),
 				micstatus: resolve(__dirname, "micstatus.html"),
 				eightsky: resolve(__dirname, "eightsky.html"),
+				pngtuber: resolve(__dirname, "pngtuber.html"),
 			},
 		},
 	},

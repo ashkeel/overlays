@@ -2,16 +2,53 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PNGTuber</title>
   <style>
+    #avatar {
+      position: relative;
+
+      img {
+        position: absolute;
+      }
+
+      .talking {
+        visibility: hidden;
+      }
+    }
+
+    #avatar.talking {
+      .idle {
+        visibility: hidden;
+      }
+
+      .talking {
+        visibility: inherit;
+      }
+    }
+
+    #debug-bar {
+      width: 0px;
+      height: 10px;
+      background-color: red;
+    }
   </style>
 </head>
 
 <body>
   <main>
+    <div id="debug-bar"></div>
+    <pre id="debug-json"></pre>
+    <div id="avatar-transform">
+      <div id="avatar">
+        <img alt="idle" class="eye-open idle" src="./pngtuber/idle.png">
+        <img alt="idle-s" class="eye-closed idle" src="./pngtuber/idle-s.png">
+        <img alt="talking" class="eye-open talking" src="./pngtuber/talking.png">
+        <img alt="talking-s" class="eye-closed talking" src="./pngtuber/talking-s.png">
+      </div>
+    </div>
   </main>
   <script type="module">
     import './pngtuber/script';
