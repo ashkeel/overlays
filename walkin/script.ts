@@ -1,5 +1,5 @@
 import { Howl } from "howler";
-import { animate } from "../alerts/sync";
+import { animate, random } from "animejs";
 import { Kilovolt } from "../lib/connection-utils";
 import { $el } from "../lib/domutils";
 import { delay } from "../lib/sync";
@@ -12,8 +12,6 @@ import sonicchan from "./sounds/sonicchan.ogg";
 import catboy from "./sounds/catboy.ogg";
 import selectoption from "./sounds/select_option.wav";
 import disgaea from "./sounds/disgaea.mp3";
-
-import anime from "animejs";
 
 import type { TwitchEventSubChatMessage } from "chat/twitch.ts";
 
@@ -60,8 +58,7 @@ async function popup(name: string) {
 	}
 	const el = makeWalkInPopup(name);
 	document.body.appendChild(el);
-	await animate({
-		targets: el,
+	await animate(el, {
 		translateX: 250,
 		translateY: 260,
 		rotate: "1turn",
@@ -69,16 +66,15 @@ async function popup(name: string) {
 		easing: "easeOutCubic",
 	});
 	await delay(2000);
-	await animate({
-		targets: el,
+	await animate(el, {
 		duration: 400,
 		easing: "easeOutCubic",
 		scaleX: 0.8,
 		scaleY: 0.4,
 		opacity: 0,
 		rotate: () => "20deg",
-		translateX: () => anime.random(-170, -122),
-		translateY: () => anime.random(-160, -120),
+		translateX: () => random(-170, -122),
+		translateY: () => random(-160, -120),
 	});
 }
 

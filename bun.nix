@@ -5,57 +5,57 @@
     binaries = {
       "biome" = "../@biomejs/biome/bin/biome";
     };
-    name = "@biomejs/biome@1.9.4";
-    url = "https://registry.npmjs.org/@biomejs/biome/-/biome-1.9.4.tgz";
-    hash = "sha512-1rkd7G70+o9KkTn5KLmDYXihGoTaIGO9PIIN2ZB7UJxFrWw04CZHPYiMRjYsaDvVV7hP1dYNRLxSANLaBFGpog==";
+    name = "@biomejs/biome@2.3.5";
+    url = "https://registry.npmjs.org/@biomejs/biome/-/biome-2.3.5.tgz";
+    hash = "sha512-HvLhNlIlBIbAV77VysRIBEwp55oM/QAjQEin74QQX9Xb259/XP/D5AGGnZMOyF1el4zcvlNYYR3AyTMUV3ILhg==";
   };
   "@biomejs/cli-darwin-arm64" = {
     out_path = "@biomejs/cli-darwin-arm64";
-    name = "@biomejs/cli-darwin-arm64@1.9.4";
-    url = "https://registry.npmjs.org/@biomejs/cli-darwin-arm64/-/cli-darwin-arm64-1.9.4.tgz";
-    hash = "sha512-bFBsPWrNvkdKrNCYeAp+xo2HecOGPAy9WyNyB/jKnnedgzl4W4Hb9ZMzYNbf8dMCGmUdSavlYHiR01QaYR58cw==";
+    name = "@biomejs/cli-darwin-arm64@2.3.5";
+    url = "https://registry.npmjs.org/@biomejs/cli-darwin-arm64/-/cli-darwin-arm64-2.3.5.tgz";
+    hash = "sha512-fLdTur8cJU33HxHUUsii3GLx/TR0BsfQx8FkeqIiW33cGMtUD56fAtrh+2Fx1uhiCsVZlFh6iLKUU3pniZREQw==";
   };
   "@biomejs/cli-darwin-x64" = {
     out_path = "@biomejs/cli-darwin-x64";
-    name = "@biomejs/cli-darwin-x64@1.9.4";
-    url = "https://registry.npmjs.org/@biomejs/cli-darwin-x64/-/cli-darwin-x64-1.9.4.tgz";
-    hash = "sha512-ngYBh/+bEedqkSevPVhLP4QfVPCpb+4BBe2p7Xs32dBgs7rh9nY2AIYUL6BgLw1JVXV8GlpKmb/hNiuIxfPfZg==";
+    name = "@biomejs/cli-darwin-x64@2.3.5";
+    url = "https://registry.npmjs.org/@biomejs/cli-darwin-x64/-/cli-darwin-x64-2.3.5.tgz";
+    hash = "sha512-qpT8XDqeUlzrOW8zb4k3tjhT7rmvVRumhi2657I2aGcY4B+Ft5fNwDdZGACzn8zj7/K1fdWjgwYE3i2mSZ+vOA==";
   };
   "@biomejs/cli-linux-arm64" = {
     out_path = "@biomejs/cli-linux-arm64";
-    name = "@biomejs/cli-linux-arm64@1.9.4";
-    url = "https://registry.npmjs.org/@biomejs/cli-linux-arm64/-/cli-linux-arm64-1.9.4.tgz";
-    hash = "sha512-fJIW0+LYujdjUgJJuwesP4EjIBl/N/TcOX3IvIHJQNsAqvV2CHIogsmA94BPG6jZATS4Hi+xv4SkBBQSt1N4/g==";
+    name = "@biomejs/cli-linux-arm64@2.3.5";
+    url = "https://registry.npmjs.org/@biomejs/cli-linux-arm64/-/cli-linux-arm64-2.3.5.tgz";
+    hash = "sha512-u/pybjTBPGBHB66ku4pK1gj+Dxgx7/+Z0jAriZISPX1ocTO8aHh8x8e7Kb1rB4Ms0nA/SzjtNOVJ4exVavQBCw==";
   };
   "@biomejs/cli-linux-arm64-musl" = {
     out_path = "@biomejs/cli-linux-arm64-musl";
-    name = "@biomejs/cli-linux-arm64-musl@1.9.4";
-    url = "https://registry.npmjs.org/@biomejs/cli-linux-arm64-musl/-/cli-linux-arm64-musl-1.9.4.tgz";
-    hash = "sha512-v665Ct9WCRjGa8+kTr0CzApU0+XXtRgwmzIf1SeKSGAv+2scAlW6JR5PMFo6FzqqZ64Po79cKODKf3/AAmECqA==";
+    name = "@biomejs/cli-linux-arm64-musl@2.3.5";
+    url = "https://registry.npmjs.org/@biomejs/cli-linux-arm64-musl/-/cli-linux-arm64-musl-2.3.5.tgz";
+    hash = "sha512-eGUG7+hcLgGnMNl1KHVZUYxahYAhC462jF/wQolqu4qso2MSk32Q+QrpN7eN4jAHAg7FUMIo897muIhK4hXhqg==";
   };
   "@biomejs/cli-linux-x64" = {
     out_path = "@biomejs/cli-linux-x64";
-    name = "@biomejs/cli-linux-x64@1.9.4";
-    url = "https://registry.npmjs.org/@biomejs/cli-linux-x64/-/cli-linux-x64-1.9.4.tgz";
-    hash = "sha512-lRCJv/Vi3Vlwmbd6K+oQ0KhLHMAysN8lXoCI7XeHlxaajk06u7G+UsFSO01NAs5iYuWKmVZjmiOzJ0OJmGsMwg==";
+    name = "@biomejs/cli-linux-x64@2.3.5";
+    url = "https://registry.npmjs.org/@biomejs/cli-linux-x64/-/cli-linux-x64-2.3.5.tgz";
+    hash = "sha512-XrIVi9YAW6ye0CGQ+yax0gLfx+BFOtKaNX74n+xHWla6Cl6huUmcKNO7HPx7BiKnJUzrxXY1qYlm7xMvi08X4g==";
   };
   "@biomejs/cli-linux-x64-musl" = {
     out_path = "@biomejs/cli-linux-x64-musl";
-    name = "@biomejs/cli-linux-x64-musl@1.9.4";
-    url = "https://registry.npmjs.org/@biomejs/cli-linux-x64-musl/-/cli-linux-x64-musl-1.9.4.tgz";
-    hash = "sha512-gEhi/jSBhZ2m6wjV530Yy8+fNqG8PAinM3oV7CyO+6c3CEh16Eizm21uHVsyVBEB6RIM8JHIl6AGYCv6Q6Q9Tg==";
+    name = "@biomejs/cli-linux-x64-musl@2.3.5";
+    url = "https://registry.npmjs.org/@biomejs/cli-linux-x64-musl/-/cli-linux-x64-musl-2.3.5.tgz";
+    hash = "sha512-awVuycTPpVTH/+WDVnEEYSf6nbCBHf/4wB3lquwT7puhNg8R4XvonWNZzUsfHZrCkjkLhFH/vCZK5jHatD9FEg==";
   };
   "@biomejs/cli-win32-arm64" = {
     out_path = "@biomejs/cli-win32-arm64";
-    name = "@biomejs/cli-win32-arm64@1.9.4";
-    url = "https://registry.npmjs.org/@biomejs/cli-win32-arm64/-/cli-win32-arm64-1.9.4.tgz";
-    hash = "sha512-tlbhLk+WXZmgwoIKwHIHEBZUwxml7bRJgk0X2sPyNR3S93cdRq6XulAZRQJ17FYGGzWne0fgrXBKpl7l4M87Hg==";
+    name = "@biomejs/cli-win32-arm64@2.3.5";
+    url = "https://registry.npmjs.org/@biomejs/cli-win32-arm64/-/cli-win32-arm64-2.3.5.tgz";
+    hash = "sha512-DlBiMlBZZ9eIq4H7RimDSGsYcOtfOIfZOaI5CqsWiSlbTfqbPVfWtCf92wNzx8GNMbu1s7/g3ZZESr6+GwM/SA==";
   };
   "@biomejs/cli-win32-x64" = {
     out_path = "@biomejs/cli-win32-x64";
-    name = "@biomejs/cli-win32-x64@1.9.4";
-    url = "https://registry.npmjs.org/@biomejs/cli-win32-x64/-/cli-win32-x64-1.9.4.tgz";
-    hash = "sha512-8Y5wMhVIPaWe6jw2H+KlEm4wP/f7EW3810ZLmDlrEEy5KvBsb9ECEfu/kMWD484ijfQ8+nIi0giMgu9g1UAuuA==";
+    name = "@biomejs/cli-win32-x64@2.3.5";
+    url = "https://registry.npmjs.org/@biomejs/cli-win32-x64/-/cli-win32-x64-2.3.5.tgz";
+    hash = "sha512-nUmR8gb6yvrKhtRgzwo/gDimPwnO5a4sCydf8ZS2kHIJhEmSmk+STsusr1LHTuM//wXppBawvSQi2xFXJCdgKQ==";
   };
   "@diffusionstudio/vits-web" = {
     out_path = "@diffusionstudio/vits-web";
@@ -473,9 +473,9 @@
   };
   "animejs" = {
     out_path = "animejs";
-    name = "animejs@3.2.2";
-    url = "https://registry.npmjs.org/animejs/-/animejs-3.2.2.tgz";
-    hash = "sha512-Ao95qWLpDPXXM+WrmwcKbl6uNlC5tjnowlaRYtuVDHHoygjtIPfDUoK9NthrlZsQSKjZXlmji2TrBUAVbiH0LQ==";
+    name = "animejs@4.2.2";
+    url = "https://registry.npmjs.org/animejs/-/animejs-4.2.2.tgz";
+    hash = "sha512-Ys3RuvLdAeI14fsdKCQy7ytu4057QX6Bb7m4jwmfd6iKmUmLquTwk1ut0e4NtRQgCeq/s2Lv5+oMBjz6c7ZuIg==";
   };
   "bad-words" = {
     out_path = "bad-words";

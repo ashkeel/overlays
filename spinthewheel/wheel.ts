@@ -1,8 +1,7 @@
-import anime from "animejs";
+import { animate, stagger } from "animejs";
 import { Howl } from "howler";
 import JSConfetti from "js-confetti";
 import { delay } from "../lib/sync";
-import { animate } from "../alerts/sync";
 import $el from "../lib/domutils";
 
 import drop from "../assets/sounds/airhornplus.mp3";
@@ -67,14 +66,13 @@ export async function spin(
 	// Create header and animate it in
 	const header = animScript(name);
 	root.appendChild(header);
-	animate({
-		targets: header.querySelectorAll(".letter"),
+	animate(header.querySelectorAll(".letter"), {
 		translateX: 150,
 		translateY: 160,
 		rotate: "1turn",
 		duration: 800,
 		easing: "easeOutCubic",
-		delay: anime.stagger(50),
+		delay: stagger(50),
 	});
 
 	// Start muzik
@@ -85,8 +83,7 @@ export async function spin(
 	const { wheel, rotationBase } = createWheel(picks);
 	root.appendChild(wheel);
 	await delay(1000);
-	animate({
-		targets: wheel,
+	animate(wheel, {
 		left: 30,
 		duration: 2000,
 	});
@@ -104,8 +101,7 @@ export async function spin(
 			const rotation = Number.parseFloat(rot[1]);
 			if (rotation - lastRotation >= angle) {
 				lastRotation = rotation;
-				animate({
-					targets: arrow,
+				animate(arrow, {
 					keyframes: [{ rotate: -10 }, { rotate: 0 }],
 					duration: 100,
 					easing: "easeOutCubic",
@@ -117,8 +113,7 @@ export async function spin(
 	requestAnimationFrame(ticker);
 
 	// SPIN DA WHEEEEEEEEEEEEEL
-	await animate({
-		targets: rotationBase,
+	await animate(rotationBase, {
 		rotateX: 360 * 6 + (picks.length - itemID) * angle,
 		duration: 20000,
 		easing: "easeOutCubic",
@@ -144,8 +139,7 @@ export async function spin(
 		200,
 	);
 	dropSprite.play();
-	await animate({
-		targets: winner,
+	await animate(winner, {
 		keyframes: [
 			{ scaleX: 1.2, scaleY: 1, rotateZ: 0 },
 			{ scaleX: 1.1, scaleY: 1.2, rotateZ: -10 },
@@ -165,17 +159,15 @@ export async function spin(
 	await delay(7000);
 
 	// Fade out everything!!!!!
-	animate({
-		targets: header.querySelectorAll(".letter"),
+	animate(header.querySelectorAll(".letter"), {
 		translateX: -150,
 		translateY: -160,
 		rotate: "1turn",
 		duration: 800,
 		easing: "easeOutCubic",
-		delay: anime.stagger(50),
+		delay: stagger(50),
 	});
-	animate({
-		targets: wheel,
+	animate(wheel, {
 		left: -1000,
 		duration: 2000,
 	});

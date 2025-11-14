@@ -1,12 +1,9 @@
-import anime from "animejs";
+import { animate, random, stagger } from "animejs";
 import { Howl } from "howler";
-import { $el } from "../lib/domutils";
-
 import followWoosh from "../assets/sounds/follow-woosh.wav";
-
-import { animate } from "./sync";
-import type { SubAlert, RaidAlert, CheerAlert } from "./types";
+import { $el } from "../lib/domutils";
 import { delay } from "../lib/sync";
+import type { CheerAlert, RaidAlert, SubAlert } from "./types";
 
 const followSprite = new Howl({ src: [followWoosh] });
 
@@ -44,18 +41,16 @@ export async function subAnim(alertData: SubAlert) {
 	}
 	staging.appendChild(div);
 	followSprite.play();
-	await animate({
-		targets: div.querySelectorAll(".letter"),
+	await animate(div.querySelectorAll(".letter"), {
 		translateX: -150,
 		translateY: -160,
 		rotate: "1turn",
 		duration: 800,
 		easing: "easeOutCubic",
-		delay: anime.stagger(50),
+		delay: stagger(50),
 	});
 	await delay(1700);
-	anime({
-		targets: div.querySelectorAll(".letter"),
+	animate(div.querySelectorAll(".letter"), {
 		duration: 400,
 		translateX: -180,
 		translateY: -220,
@@ -65,30 +60,28 @@ export async function subAnim(alertData: SubAlert) {
 	});
 	const userdiv = animScript(alertData.user);
 	staging.appendChild(userdiv);
-	anime({
-		targets: userdiv.querySelectorAll(".letter"),
+	animate(userdiv.querySelectorAll(".letter"), {
 		translateX: -150,
 		translateY: -160,
 		rotate: "1turn",
 		duration: 400,
 		easing: "easeOutCubic",
-		delay: anime.stagger(50),
+		delay: stagger(50),
 	});
 	await delay(3000);
-	await animate({
-		targets: [
-			div.querySelectorAll(".letter"),
-			userdiv.querySelectorAll(".letter"),
-		],
-		duration: 200,
-		easing: "easeOutCubic",
-		scaleX: 0.8,
-		scaleY: 0,
-		rotate: () => `${anime.random(0, 40)}deg`,
-		translateX: () => anime.random(-170, -220),
-		translateY: () => anime.random(-160, -200),
-		delay: anime.stagger(20),
-	});
+	await animate(
+		[div.querySelectorAll(".letter"), userdiv.querySelectorAll(".letter")],
+		{
+			duration: 200,
+			easing: "easeOutCubic",
+			scaleX: 0.8,
+			scaleY: 0,
+			rotate: () => `${random(0, 40)}deg`,
+			translateX: () => random(-170, -220),
+			translateY: () => random(-160, -200),
+			delay: stagger(20),
+		},
+	);
 	staging.removeChild(div);
 }
 
@@ -101,18 +94,16 @@ export async function raidAnim(alertData: RaidAlert) {
 	}
 	staging.appendChild(div);
 	followSprite.play();
-	await animate({
-		targets: div.querySelectorAll(".letter"),
+	await animate(div.querySelectorAll(".letter"), {
 		translateX: -150,
 		translateY: -160,
 		rotate: "1turn",
 		duration: 800,
 		easing: "easeOutCubic",
-		delay: anime.stagger(50),
+		delay: stagger(50),
 	});
 	await delay(1700);
-	anime({
-		targets: div.querySelectorAll(".letter"),
+	animate(div.querySelectorAll(".letter"), {
 		duration: 400,
 		translateX: -180,
 		translateY: -220,
@@ -122,30 +113,28 @@ export async function raidAnim(alertData: RaidAlert) {
 	});
 	const userdiv = animScript(alertData.user);
 	staging.appendChild(userdiv);
-	anime({
-		targets: userdiv.querySelectorAll(".letter"),
+	animate(userdiv.querySelectorAll(".letter"), {
 		translateX: -150,
 		translateY: -160,
 		rotate: "1turn",
 		duration: 400,
 		easing: "easeOutCubic",
-		delay: anime.stagger(50),
+		delay: stagger(50),
 	});
 	await delay(3000);
-	await animate({
-		targets: [
-			div.querySelectorAll(".letter"),
-			userdiv.querySelectorAll(".letter"),
-		],
-		duration: 200,
-		easing: "easeOutCubic",
-		scaleX: 0.8,
-		scaleY: 0,
-		rotate: () => `${anime.random(0, 40)}deg`,
-		translateX: () => anime.random(-170, -220),
-		translateY: () => anime.random(-160, -200),
-		delay: anime.stagger(20),
-	});
+	await animate(
+		[div.querySelectorAll(".letter"), userdiv.querySelectorAll(".letter")],
+		{
+			duration: 200,
+			easing: "easeOutCubic",
+			scaleX: 0.8,
+			scaleY: 0,
+			rotate: () => `${random(0, 40)}deg`,
+			translateX: () => random(-170, -220),
+			translateY: () => random(-160, -200),
+			delay: stagger(20),
+		},
+	);
 	staging.removeChild(div);
 }
 
@@ -158,18 +147,16 @@ export async function cheerAnim(alertData: CheerAlert) {
 	}
 	staging.appendChild(div);
 	followSprite.play();
-	await animate({
-		targets: div.querySelectorAll(".letter"),
+	await animate(div.querySelectorAll(".letter"), {
 		translateX: -150,
 		translateY: -160,
 		rotate: "1turn",
 		duration: 800,
 		easing: "easeOutCubic",
-		delay: anime.stagger(50),
+		delay: stagger(50),
 	});
 	await delay(1700);
-	anime({
-		targets: div.querySelectorAll(".letter"),
+	animate(div.querySelectorAll(".letter"), {
 		duration: 400,
 		translateX: -180,
 		translateY: -220,
@@ -179,29 +166,27 @@ export async function cheerAnim(alertData: CheerAlert) {
 	});
 	const userdiv = animScript(alertData.user);
 	staging.appendChild(userdiv);
-	anime({
-		targets: userdiv.querySelectorAll(".letter"),
+	animate(userdiv.querySelectorAll(".letter"), {
 		translateX: -150,
 		translateY: -160,
 		rotate: "1turn",
 		duration: 400,
 		easing: "easeOutCubic",
-		delay: anime.stagger(50),
+		delay: stagger(50),
 	});
 	await delay(3000);
-	await animate({
-		targets: [
-			div.querySelectorAll(".letter"),
-			userdiv.querySelectorAll(".letter"),
-		],
-		duration: 200,
-		easing: "easeOutCubic",
-		scaleX: 0.8,
-		scaleY: 0,
-		rotate: () => `${anime.random(0, 40)}deg`,
-		translateX: () => anime.random(-170, -220),
-		translateY: () => anime.random(-160, -200),
-		delay: anime.stagger(20),
-	});
+	await animate(
+		[div.querySelectorAll(".letter"), userdiv.querySelectorAll(".letter")],
+		{
+			duration: 200,
+			easing: "easeOutCubic",
+			scaleX: 0.8,
+			scaleY: 0,
+			rotate: () => `${random(0, 40)}deg`,
+			translateX: () => random(-170, -220),
+			translateY: () => random(-160, -200),
+			delay: stagger(20),
+		},
+	);
 	staging.removeChild(div);
 }
